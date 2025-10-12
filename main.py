@@ -76,7 +76,9 @@ def run_experiment(g, d2_g, template,
 
 def main():
     template = templates["normal"]
-    e_pow, a_pow = run_experiment(g=g, d2_g=d2_g, template=template)
+    e_pow, a_pow = run_experiment(g=g, d2_g=d2_g, template=template,
+                                  h1=0.0, h2=3.5, alpha=0.05, N=1000,
+                                   M = 100, sample_sizes=[100,400,900] )
     print(e_pow)
     print(a_pow)
 
