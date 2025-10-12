@@ -8,34 +8,14 @@ def g(x):
 def d2_g(x):
     pass
 
-
-#по имени и n генерировать выборки из F1, F2_n
-# получать f(x) - плотность F1
-def get_template(name):
-    phi = None
-
-    if name == "normal":
-        def _phi(n, h1, h2):
-            return stats.norm( ... ) 
-        phi = _phi
-
-    elif name == "cauchy":
-        def _phi(n, h1, h2):
-            return stats.cauchy( ... ) 
-        phi = _phi
-    
-    return phi
-    
+ 
+templates = {
+    "normal": lambda n,h1,h2: stats.norm( ... ) ,
+    "cauchy": lambda n,h1,h2: stats.norm( ... ) ,
+}
 
 
-# density for F(x)
-def f(x):
-    pass
-
-
-
-
-def run_experiment(f, g, d2_g, 
+def run_experiment(g, d2_g, template,
                    h1=0, h2=2.1, alpha=0.05,
                    N=1000, M=17, sample_sizes=[100, 400, 900]):
     """
@@ -58,6 +38,9 @@ def run_experiment(f, g, d2_g,
     ``empirical_powers`` and ``asymptotic_power``
     """
 
+    d1 = template(1, 0, 0)
+    f = d1.pdf
+
     integrals = compute_integrals(f, g, d2_g, h1, h2)
 
     b1 = np.sqrt( np.abs( integrals["J1_star"] ) )
@@ -71,14 +54,16 @@ def run_experiment(f, g, d2_g,
     asp_power = compute_asymptotic_power(alpha, b, a)
     
     for n in sample_sizes:
-        crit_val = compute_crit_val(n, M, alpha)
-        e_pow = compute_empirical_power(n, N, crit_val)
+        crit_val = compute_crit_val(n, M, alpha, template, g)
+        d2_n = template(n, h1, h2)
+        e_pow = compute_empirical_power(n, N, crit_val, d1, d2_n, g)
         emp_powers.append(e_pow)
 
     return emp_powers, asp_power
 
 
 def main():
-    e_pow, a_pow = run_experiment(f=f, g=g, d2_g=d2_g)
+    template = templates["normal"]
+    e_pow, a_pow = run_experiment(g=g, d2_g=d2_g, template=template)
 
 

@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.integrate import nquad
 from scipy import stats
+import random
 
 def compute_etest(g, X, Y):
     n = len(X)
@@ -65,8 +66,23 @@ def compute_asymptotic_power(alpha, b, a):
     return 1 - F(z - b / a) + F( -z - b / a)
 
 
-def compute_crit_val(n, M, alpha):
-    pass
+def compute_crit_val(n, M, alpha, template, g):
+    
+    dist1 = template(1,0,0)
+
+    Z = dist1.rvs(2*n)
+
+    test_vals = []
+
+    for _ in range(M):
+        x_indices = random.sample(range(0,2*n), n)
+        y_indices = [i for i in range(0,2*n) if i not in x_indices]
+        X = Z[x_indices]
+        Y = Z[y_indices]
+        etest_val = compute_etest(g, X, Y)
+        test_vals.append( n * etest_val )
+
+    return np.quantile(test_vals, 1 - alpha)
 
 
 def compute_empirical_power(n, N, crit_val, d1, d2, g):
