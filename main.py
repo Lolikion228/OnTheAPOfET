@@ -1,5 +1,5 @@
 from first import *
-
+from scipy import stats
 
 
 def g(x):
@@ -7,6 +7,26 @@ def g(x):
 
 def d2_g(x):
     pass
+
+
+#по имени и n генерировать выборки из F1, F2_n
+# получать f(x) - плотность F1
+def get_template(name):
+    phi = None
+
+    if name == "normal":
+        def _phi(n, h1, h2):
+            return stats.norm( ... ) 
+        phi = _phi
+
+    elif name == "cauchy":
+        def _phi(n, h1, h2):
+            return stats.cauchy( ... ) 
+        phi = _phi
+    
+    return phi
+    
+
 
 # density for F(x)
 def f(x):

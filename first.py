@@ -1,5 +1,28 @@
 import numpy as np
 from scipy.integrate import nquad
+from scipy import stats
+
+def compute_test(g, X, Y):
+    n = len(X)
+
+    phi_a = 0
+    phi_b = 0
+    phi_ab = 0
+
+    for i in range(n):
+        for j in range(n):
+            if i < j:
+                phi_a += g(X[i] - X[j])
+                phi_b += g(Y[i] - Y[j])
+            phi_ab += g(X[i] - Y[j])
+
+    phi_a  /=  n**2
+    phi_b  /=  n**2  #  /= m**2 in general case
+    phi_ab /= n**2   #  /= n*m in general case
+
+    phi = phi_ab - phi_a - phi_b
+
+    return phi
 
 
 def compute_integrals(f, g, d2_g, h1, h2):
@@ -31,7 +54,7 @@ def compute_integrals(f, g, d2_g, h1, h2):
         ranges=[(-np.inf, +np.inf),
                 (-np.inf, +np.inf)])
     
-    
+
     return integrals
 
 
@@ -43,8 +66,21 @@ def compute_crit_val(n, M, alpha):
     pass
 
 
-def compute_empirical_power(n, N, crit_val):
-    pass
+def compute_empirical_power(n, N, crit_val, d1, d2, g):
+    """
+    ``d1`` - first distribution \\
+    ``d2`` - second distribution 
+    """
+
+    cnt_reject = 0
+
+    for _ in range(N):
+        X = d1.rvs(n)
+        Y = d2.rvs(n)
+        test_val = compute_test(g, X, Y)
+        cnt_reject += int( n * test_val >= crit_val)
+
+    return cnt_reject / N 
 
 
 
