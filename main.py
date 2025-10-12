@@ -45,7 +45,9 @@ def run_experiment(g, d2_g, template,
     d1 = template(1, 0, 0)
     f = d1.pdf
 
+    print("computing integrals...")
     integrals = compute_integrals(f, g, d2_g, h1, h2)
+    print("done with integrals\n")
 
     b1 = np.sqrt( np.abs( integrals["J1_star"] ) )
     b2 = np.sqrt( np.abs( integrals["J2_star"] ) )
@@ -57,10 +59,16 @@ def run_experiment(g, d2_g, template,
     emp_powers = []
     asp_power = compute_asymptotic_power(alpha, b, a)
     
+    print("computing empirical_powers...")
     for n in sample_sizes:
+        print(f"n={n}")
+        print("computing critical_value...")
         crit_val = compute_crit_val(n, M, alpha, template, g)
+        print("done computing critical_value")
         d2_n = template(n, h1, h2)
+        print("computing e_pow for n*T_n...")
         e_pow = compute_empirical_power(n, N, crit_val, d1, d2_n, g)
+        print("done computing e_pow for n*T_n\n")
         emp_powers.append(e_pow)
 
     return emp_powers, asp_power

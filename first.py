@@ -2,6 +2,7 @@ import numpy as np
 from scipy.integrate import nquad
 from scipy import stats
 import random
+import tqdm
 
 def compute_etest(g, X, Y):
     n = len(X)
@@ -29,31 +30,36 @@ def compute_etest(g, X, Y):
 def compute_integrals(f, g, d2_g, h1, h2):
     integrals = dict()
 
+    print("computing J1...")
     integrals["J1"] = nquad(
         lambda x,y: g(x - y) * f(x) * f(y),
         ranges=[(-np.inf, +np.inf),
-                (-np.inf, +np.inf)])
+                (-np.inf, +np.inf)])[0]
     
+    print("computing J2...")
     integrals["J2"] = nquad(
         lambda x,y: (g(x - y) ** 2) * f(x) * f(y),
         ranges=[(-np.inf, +np.inf),
-                (-np.inf, +np.inf)])
+                (-np.inf, +np.inf)])[0]
     
+    print("computing J3...")
     integrals["J3"] = nquad(
         lambda x,y,z: g(x - y) * g(x - z) * f(x) * f(y) * f(z),
         ranges=[(-np.inf, +np.inf),
                 (-np.inf, +np.inf),
-                (-np.inf, +np.inf)])
+                (-np.inf, +np.inf)])[0]
     
+    print("computing J1_star...")
     integrals["J1_star"] = 0.5 * (h1 ** 2) * nquad(
         lambda x,y: d2_g(x - y) * f(x) * f(y),
         ranges=[(-np.inf, +np.inf),
-                (-np.inf, +np.inf)])
+                (-np.inf, +np.inf)])[0]
     
+    print("computing J2_star...")
     integrals["J2_star"] = 0.5 * (h2 ** 2) * nquad(
         lambda x,y: (y**2 - 0.5 * (x-y)**2) * d2_g(x - y) * f(x) * f(y),
         ranges=[(-np.inf, +np.inf),
-                (-np.inf, +np.inf)])
+                (-np.inf, +np.inf)])[0]
     
 
     return integrals
