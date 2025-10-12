@@ -1,6 +1,6 @@
 from first import *
 from scipy import stats
-
+from tqdm import tqdm
 
 def g(x):
     pass
@@ -10,8 +10,10 @@ def d2_g(x):
 
  
 templates = {
-    "normal": lambda n,h1,h2: stats.norm( ... ) ,
-    "cauchy": lambda n,h1,h2: stats.cauchy( ... ) ,
+    "normal": lambda n,h1,h2: stats.norm(
+                            loc = -h2 / (h1 + n**0.5),
+                            scale= 1 / (1 + h1/(n**0.5)) ),
+    "cauchy": None
 }
 
 
@@ -21,7 +23,7 @@ def run_experiment(g, d2_g, template,
     """
     params:
     ---
-    ``h1`` - scale diff
+    ``h1`` - scale diff (h1 >= 0)
 
     ``h2`` - shift diff
 
@@ -37,6 +39,9 @@ def run_experiment(g, d2_g, template,
     ---------
     ``empirical_powers`` and ``asymptotic_power``
     """
+
+    if h1 < 0:
+        raise Exception("h1 must be geq than 0")
 
     d1 = template(1, 0, 0)
     f = d1.pdf

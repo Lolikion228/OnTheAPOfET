@@ -75,8 +75,11 @@ def compute_crit_val(n, M, alpha, template, g):
     test_vals = []
 
     for _ in range(M):
+
+        # mb change to permutations?
         x_indices = random.sample(range(0,2*n), n)
         y_indices = [i for i in range(0,2*n) if i not in x_indices]
+
         X = Z[x_indices]
         Y = Z[y_indices]
         etest_val = compute_etest(g, X, Y)
@@ -96,8 +99,8 @@ def compute_empirical_power(n, N, crit_val, d1, d2, g):
     for _ in range(N):
         X = d1.rvs(n)
         Y = d2.rvs(n)
-        test_val = compute_etest(g, X, Y)
-        cnt_reject += int( n * test_val >= crit_val)
+        etest_val = compute_etest(g, X, Y)
+        cnt_reject += int( n * etest_val >= crit_val)
 
     return cnt_reject / N 
 
