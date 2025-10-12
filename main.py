@@ -3,11 +3,10 @@ from scipy import stats
 from tqdm import tqdm
 
 def g(x):
-    pass
+    return np.log(1 + x**2)
 
 def d2_g(x):
-    pass
-
+    return 2 * (1 - x**2) / ((1 + x**2)**2) 
  
 templates = {
     "normal": lambda n,h1,h2: stats.norm(
@@ -70,5 +69,7 @@ def run_experiment(g, d2_g, template,
 def main():
     template = templates["normal"]
     e_pow, a_pow = run_experiment(g=g, d2_g=d2_g, template=template)
+    print(e_pow)
+    print(a_pow)
 
-
+main()
