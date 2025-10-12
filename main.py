@@ -11,7 +11,7 @@ def d2_g(x):
  
 templates = {
     "normal": lambda n,h1,h2: stats.norm( ... ) ,
-    "cauchy": lambda n,h1,h2: stats.norm( ... ) ,
+    "cauchy": lambda n,h1,h2: stats.cauchy( ... ) ,
 }
 
 
