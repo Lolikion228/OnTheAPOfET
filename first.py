@@ -2,7 +2,7 @@ import numpy as np
 from scipy.integrate import nquad
 from scipy import stats
 
-def compute_test(g, X, Y):
+def compute_etest(g, X, Y):
     n = len(X)
 
     phi_a = 0
@@ -59,7 +59,10 @@ def compute_integrals(f, g, d2_g, h1, h2):
 
 
 def compute_asymptotic_power(alpha, b, a):
-    pass
+    dist = stats.norm(loc=0.0, scale=1.0)
+    F = dist.cdf
+    z = dist.ppf(1 - alpha / 2)
+    return 1 - F(z - b / a) + F( -z - b / a)
 
 
 def compute_crit_val(n, M, alpha):
@@ -77,7 +80,7 @@ def compute_empirical_power(n, N, crit_val, d1, d2, g):
     for _ in range(N):
         X = d1.rvs(n)
         Y = d2.rvs(n)
-        test_val = compute_test(g, X, Y)
+        test_val = compute_etest(g, X, Y)
         cnt_reject += int( n * test_val >= crit_val)
 
     return cnt_reject / N 
