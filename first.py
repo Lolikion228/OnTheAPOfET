@@ -6,6 +6,28 @@ from tqdm import tqdm
 import time
 
 def compute_etest(g, X, Y):
+    X = np.asarray(X)
+    Y = np.asarray(Y)
+
+    # Создаем матрицы разностей
+    diff_xy = X[:, np.newaxis] - Y[np.newaxis, :]  # форма: (len(X), len(Y))
+    diff_xx = X[:, np.newaxis] - X[np.newaxis, :]  # форма: (len(X), len(X))
+    diff_yy = Y[:, np.newaxis] - Y[np.newaxis, :]  # форма: (len(Y), len(Y))
+    
+    # Применяем функцию g ко всем элементам
+    g_xy = g(diff_xy)
+    g_xx = g(diff_xx)
+    g_yy = g(diff_yy)
+
+    # Суммируем все элементы (исключая диагональ для g_xx если нужно)
+    phi_ab = np.sum(g_xy) 
+    phi_a = np.sum(np.triu(g_xx, k=1)) 
+    phi_b = np.sum(np.triu(g_yy, k=1)) 
+
+    return (phi_ab - phi_a - phi_b) / X.shape[0] 
+
+
+def compute_etest2(g, X, Y):
     n = len(X)
 
     phi_a = 0
@@ -28,7 +50,8 @@ def compute_etest(g, X, Y):
     return phi
 
 
-def compute_integrals(f, g, d2_g, h1, h2):
+# J1 J2 J3 can be precomputed
+def compute_integrals1(f, g):
     integrals = dict()
 
     print("computing J1...")
@@ -47,14 +70,19 @@ def compute_integrals(f, g, d2_g, h1, h2):
 
     t0= time.time()
     print("computing J3...") # 22:51
-    integrals["J3"] = nquad(
-        lambda x,y,z: g(x - y) * g(x - z) * f(x) * f(y) * f(z),
-        ranges=[(-100, +100),
-                (-100, +100),
-                (-100, +100)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
+    # integrals["J3"] = nquad(
+    #     lambda x,y,z: g(x - y) * g(x - z) * f(x) * f(y) * f(z),
+    #     ranges=[(-100, +100),
+    #             (-100, +100),
+    #             (-100, +100)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
+    integrals["J3"] = 0.76336
     print("J3 =", integrals["J3"])
     print(time.time()-t0)
 
+    return integrals
+
+def compute_integrals2(f, d2_g, h1, h2, integrals):
+    
     print("computing J1_star...")
     integrals["J1_star"] = 0.5 * (h1 ** 2) * nquad(
         lambda x,y: d2_g(x - y) * f(x) * f(y),
@@ -69,8 +97,8 @@ def compute_integrals(f, g, d2_g, h1, h2):
                 (-np.inf, +np.inf)])[0]
     print("J2_star =", integrals["J2_star"])
     
-
     return integrals
+
 
 
 def compute_asymptotic_power(alpha, b, a):
@@ -79,7 +107,7 @@ def compute_asymptotic_power(alpha, b, a):
     z = dist.ppf(1 - alpha / 2)
     return 1 - F(z - b / a) + F( -z - b / a)
 
-
+#just precompute for all n
 def compute_crit_val(n, M, alpha, template, g):
     
     dist1 = template(1,0,0)

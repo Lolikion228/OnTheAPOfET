@@ -16,9 +16,10 @@ templates = {
 }
 
 
-def run_experiment(g, d2_g, template,
+def experiment_step(g, d2_g, template,
                    h1=0, h2=2.1, alpha=0.05,
-                   N=1000, M=17, sample_sizes=[100, 400, 900]):
+                   N=1000, M=17, sample_sizes=[100, 400, 900],
+                   integrals1=None, crit_vals=None):
     """
     params:
     ---
@@ -38,6 +39,8 @@ def run_experiment(g, d2_g, template,
     ---------
     ``empirical_powers`` and ``asymptotic_power``
     """
+    if integrals1 is None or crit_vals is None:
+        raise Exception("integrals1 of crit_vals is None")
 
     if h1 < 0:
         raise Exception("h1 must be geq than 0")
@@ -45,9 +48,9 @@ def run_experiment(g, d2_g, template,
     d1 = template(1, 0, 0)
     f = d1.pdf
 
-    print("computing integrals...")
-    integrals = compute_integrals(f, g, d2_g, h1, h2)
-    print("done with integrals\n")
+    print("computing integrals2...")
+    integrals = compute_integrals2(f, d2_g, h1, h2, integrals=integrals1)
+    print("done with integrals2\n")
 
     b1 = np.sqrt( np.abs( integrals["J1_star"] ) )
     b2 = np.sqrt( np.abs( integrals["J2_star"] ) )
@@ -58,28 +61,64 @@ def run_experiment(g, d2_g, template,
 
     emp_powers = []
     asp_power = compute_asymptotic_power(alpha, b, a)
-    
+
     print("computing empirical_powers...")
     for n in sample_sizes:
         print(f"n={n}")
-        print("computing critical_value...")
-        crit_val = compute_crit_val(n, M, alpha, template, g)
-        print("done computing critical_value")
         d2_n = template(n, h1, h2)
         print("computing e_pow for n*T_n...")
-        e_pow = compute_empirical_power(n, N, crit_val, d1, d2_n, g)
+        e_pow = compute_empirical_power(n, N, crit_vals[n], d1, d2_n, g)
         print("done computing e_pow for n*T_n\n")
         emp_powers.append(e_pow)
 
     return emp_powers, asp_power
 
 
+
+def run_experiment(g, d2_g, template, h1=0,
+                   h2_vals=[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+                   alpha=0.05, N=1000, M=700,
+                   sample_sizes=[100, 400, 900, 1600]):
+    
+    print("precomputing integrals1...")
+    d1 = template(1, 0, 0)
+    f = d1.pdf
+    integrals1 = compute_integrals1(f,g)
+    print('done with integrals1\n')
+
+    print("computing critical_values for different n...")
+    crit_vals = dict()
+    for n in tqdm(sample_sizes):
+        print(f"n={n}")
+        crit_val = compute_crit_val(n, M, alpha, template, g)
+        crit_vals[n] = crit_val
+    print("done computing critical_values\n")
+
+    for h2 in h2_vals:
+        print('experiment step with h2 =', h2, '\n')
+        template = templates["normal"]
+        e_pow, a_pow = experiment_step(g=g, d2_g=d2_g, template=template,
+                                    h1=h1, h2=h2, alpha=alpha, N=N,
+                                    M = M, sample_sizes=sample_sizes,
+                                    integrals1=integrals1,
+                                    crit_vals=crit_vals)
+        print(e_pow)
+        print(a_pow)
+        print("="*100)
+        print("="*100)
+        print()
+
+
+
+
+
 def main():
     template = templates["normal"]
-    e_pow, a_pow = run_experiment(g=g, d2_g=d2_g, template=template,
-                                  h1=0.0, h2=3.5, alpha=0.05, N=1000,
-                                   M = 100, sample_sizes=[100,400,900] )
-    print(e_pow)
-    print(a_pow)
+
+    run_experiment(g, d2_g, template, h1=0,
+                   h2_vals=[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+                   alpha=0.05, N=1000, M=17,
+                   sample_sizes=[100, 400, 900])
+    
 
 main()
