@@ -173,9 +173,9 @@ def main():
     template = templates["normal"]
 
     run_experiment(g, d2_g, template, h1=0,
-                   h2_vals=np.linspace(0.5, 6.0, 11, endpoint=True),
+                   h2_vals=[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
                    alpha=0.05, N=1000, M=700,
-                   sample_sizes=[100, 400, 900])
+                   sample_sizes=[100, 400, 900, 1600])
     
 
 
