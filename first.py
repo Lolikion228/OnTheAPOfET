@@ -77,7 +77,7 @@ def compute_integrals1(f, g):
     #             (-100, +100)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
     integrals["J3"] = 0.76336
     print("J3 =", integrals["J3"])
-    print(time.time()-t0)
+    print("elapsed time for J3:", time.time()-t0)
 
     return integrals
 
