@@ -24,7 +24,7 @@ def compute_etest(g, X, Y):
     phi_a = np.sum(np.triu(g_xx, k=1)) 
     phi_b = np.sum(np.triu(g_yy, k=1)) 
 
-    return (phi_ab - phi_a - phi_b) / X.shape[0] 
+    return (phi_ab - phi_a - phi_b) / X.shape[0]**2 
 
 
 def compute_etest2(g, X, Y):
@@ -75,7 +75,7 @@ def compute_integrals1(f, g):
     #     ranges=[(-100, +100),
     #             (-100, +100),
     #             (-100, +100)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
-    integrals["J3"] = 0.76336
+    integrals["J3"] = 0.763368
     print("J3 =", integrals["J3"])
     print("elapsed time for J3:", time.time()-t0)
 
@@ -107,7 +107,7 @@ def compute_asymptotic_power(alpha, b, a):
     z = dist.ppf(1 - alpha / 2)
     return 1 - F(z - b / a) + F( -z - b / a)
 
-#just precompute for all n
+
 def compute_crit_val(n, M, alpha, template, g):
     
     dist1 = template(1,0,0)

@@ -10,8 +10,8 @@ def d2_g(x):
  
 templates = {
     "normal": lambda n,h1,h2: stats.norm(
-                            loc = -h2 / (h1 + n**0.5),
-                            scale= 1 / (1 + h1/(n**0.5)) ),
+                            loc = -h1 / (h2 + n**0.5),
+                            scale= 1 / (1 + h2/(n**0.5)) ),
     "cauchy": None
 }
 
@@ -23,9 +23,9 @@ def experiment_step(g, d2_g, template,
     """
     params:
     ---
-    ``h1`` - scale diff (h1 >= 0)
+    ``h1`` - shift diff (h1 >= 0)
 
-    ``h2`` - shift diff
+    ``h2`` - scale diff
 
     ``alpha`` - level of significance 
 
@@ -112,14 +112,73 @@ def run_experiment(g, d2_g, template, h1=0,
 
 
 
+def test1():
+    template = templates["normal"]
+    h1_vals = np.linspace(0,5,3)
+    h2_vals = np.linspace(0,5,3)
+    n_vals = [100,400,900]
+    x_vals = [-1, -0.5, 0, 0.5, 1]
+    d1 = template(1,0,0)
+    for h1 in h1_vals:
+        for h2 in h2_vals:
+            for n in n_vals:
+                d2 = template(n, h1, h2)
+                for x in x_vals:
+                    print( abs( d1.cdf( x*(1+h1/n**0.5) + h2/n**0.5 ) - d2.cdf(x) ) )
+
+def test2():
+    template = templates["normal"]
+    d1 = template(1,0,0)
+
+    n = 400
+    M = 700
+    alpha = 0.05
+    N = 500
+
+    c = compute_crit_val(n, M, alpha, template, g)
+
+    cnt = 0
+
+    for _ in range(N):
+        X = d1.rvs(n)
+        Y = d1.rvs(n)
+        cnt += int(n * compute_etest(g,X,Y) >= c)
+
+    print(cnt / N)
+
+def test3():
+    template = templates["normal"]
+    d1 = template(1,0,0)
+    n=100
+    h1=0
+    
+    N = 1000
+    cv = compute_crit_val(n, 1000, 0.05, template, g)
+
+
+    for h2 in [1,2,3,4,5,6]:
+        d2_n = template(n,h1,h2)
+        e_pow = compute_empirical_power(n, N, cv, d1, d2_n, g)
+        print(h2, e_pow)
+    
+def test():
+    # test1()
+    # test2()
+    test3()
+
+
+
 
 def main():
     template = templates["normal"]
 
     run_experiment(g, d2_g, template, h1=0,
-                   h2_vals=np.linspace(0.5, 5.0, 10, endpoint=True),
+                   h2_vals=np.linspace(0.5, 6.0, 11, endpoint=True),
                    alpha=0.05, N=1000, M=700,
-                   sample_sizes=[100, 400, 900, 1600])
+                   sample_sizes=[100, 400, 900])
     
 
+
+# test()
 main()
+
