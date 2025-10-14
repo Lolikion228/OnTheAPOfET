@@ -10,7 +10,7 @@
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
     double phi_a = 0, phi_b = 0, phi_ab = 0;
 
-    #pragma omp parallel for
+    #pragma omp parallel for reduction(+:phi_a, phi_b, phi_ab)
     for(int i=0; i<sample_size; ++i){
         for(int j=0; j<=i; ++j){
             phi_ab += g(X[i] - Y[j]);

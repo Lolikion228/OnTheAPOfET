@@ -59,12 +59,12 @@ int main() {
     // print_sample(X, sample_size);
     // print_sample(Y, sample_size);
 
-    int n = 1000;
-    int M = 1000;
-    double alpha = 0.03;
-    boost::random::normal_distribution<> d1(0,1);
-    double cv = compute_crit_val(n, M, alpha, d1, g);
-    std::cout << cv << "\n";
+    // int n = 100;
+    // int M = 1000;
+    // double alpha = 0.33;
+    // boost::random::normal_distribution<> d1(0,1);
+    // double cv = compute_crit_val(n, M, alpha, d1, g);
+    // std::cout << cv << "\n";
 
 
     
@@ -81,13 +81,13 @@ int main() {
     // std :: cout<<data[0];
 
 
-    // int n = 100;
-    // int N = 50000;
-    // double cv = 55;
-    // boost::random::normal_distribution<> d1(0, 1);
-    // boost::random::normal_distribution<> d2(0.2 ,5);
-    // double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
-    // std::cout << ep << "\n";
+    int n = 100;
+    int N = 5000;
+    double cv = 51;
+    boost::random::normal_distribution<> d1(0, 1);
+    boost::random::normal_distribution<> d2(0.2 ,5);
+    double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
+    std::cout << ep << "\n";
 
 
     auto end = std::chrono::high_resolution_clock::now();

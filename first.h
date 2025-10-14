@@ -33,7 +33,7 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::f
     double cnt_reject = 0;
 
 
-    #pragma omp parallel for
+    #pragma omp parallel for reduction(+:cnt_reject)
     for(int i=0; i<N; ++i){
         double *X = sample(d1, n);
         double *Y = sample(d2, n);
@@ -101,20 +101,26 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
     for(int i=0; i<2*n; ++i){
         Z.push_back(Z_[i]);
     }
+    delete[] Z_;
     
-    std::vector<double> test_vals;
-    double *X = new double[n];
-    double *Y = new double[n];
+    std::vector<double> test_vals(M);
+    
+    #pragma omp parallel
+    {
 
-    #pragma omp parallel for
-    for(int i=0; i<M; ++i){
-        random_split_direct(Z, n, X, Y);
-        double etest_val = compute_etest(g, X, Y, n);
-        test_vals.push_back(n * etest_val);
+        double *X = new double[n];
+        double *Y = new double[n];
+
+        #pragma omp for
+        for(int i=0; i<M; ++i){
+            random_split_direct(Z, n, X, Y);
+            double etest_val = compute_etest(g, X, Y, n);
+            test_vals[i] = n * etest_val;
+        }
+
+        delete[] X;
+        delete[] Y;
     }
-    
-    delete[] X;
-    delete[] Y;
 
     return quantile(test_vals, 1 - alpha);
 }
