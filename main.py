@@ -167,10 +167,26 @@ def test3():
         e_pow = compute_empirical_power(n, N, cv, d1, d2_n, g)
         print(h2, e_pow)
     
+
+def test4():
+    X = [1, 2, 3, 4, 4, 2, 2, 3]
+    Y = [9, 9, 9, 9, 1, 3, 8, 8]
+    print(compute_etest2(g, X, Y))
+
+def test5():
+    X = [1, 2, 3, 4, 4, 2, 2, 3, 11, 12, 17, 6, 20, 14]
+    print(np.quantile(X, 0.87))
+
+def test6():
+    print(compute_asymptotic_power(0.02, 0.1, 0.3))
+
 def test():
     # test1()
     # test2()
-    test3()
+    # test3()
+    # test4()
+    # test5()
+    test6()
 
 
 
@@ -185,9 +201,9 @@ def main():
     
 
 
-# test()
+test()
 # main()
 
-f = templates["cauchy"](1, 0, 0).pdf
-integrals = compute_integrals(f, g, d2_g)
-print(integrals)
+# f = templates["cauchy"](1, 0, 0).pdf
+# integrals = compute_integrals(f, g, d2_g)
+# print(integrals)
