@@ -68,31 +68,32 @@ double quantile(const std::vector<T>& data, double probability) {
 
 
 template<typename T>
-std::pair<double*, double*> random_split_direct(std::vector<T> Z, size_t n, boost::random::mt19937 gen) {
+void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost::random::mt19937 gen) {
     std::shuffle(Z.begin(), Z.end(), gen);
-    double *X = new double[n];
-    double *Y = new double[n];
 
     for(int i=0; i<n; ++i){
-        X = Z[i];
-        Y = Z[i+n];
+        X[i] = Z[i];
+        Y[i] = Z[i+n];
     }
 
-    return {X,Y};
 }
 
 
 template <typename T>
 double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g, boost::random::mt19937 gen){
     
-    Z = sample(gen, d1, 2*n);
+    double *Z_ = sample(gen, d1, 2*n);
+    std::vector<double> Z;
+    for(int i=0; i<2*n; ++i){
+        Z.push_back(Z_[i]);
+    }
     
     std::vector<double> test_vals;
     double etest_val;
     double *X, *Y;
 
     for(int i=0; i<M; ++i){
-        [X,Y] = random_split_direct(Z, n, gen);
+        random_split_direct(Z, n, X, Y, gen);
         etest_val = compute_etest(g, X, Y, n);
         test_vals.push_back(n * etest_val);
         delete[] X;
