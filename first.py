@@ -72,10 +72,13 @@ def compute_integrals1(f, g):
     print("computing J3...") # 22:51
     # integrals["J3"] = nquad(
     #     lambda x,y,z: g(x - y) * g(x - z) * f(x) * f(y) * f(z),
-    #     ranges=[(-100, +100),
-    #             (-100, +100),
-    #             (-100, +100)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
-    integrals["J3"] = 0.763368
+    #     ranges=[(-50, +50),
+    #             (-50, +50),
+    #             (-50, +50)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
+    # integrals["J3"] = 0.763368 # for normal
+    integrals["J3"] = 6.881056 # for cauchy
+
+
     print("J3 =", integrals["J3"])
     print("elapsed time for J3:", time.time()-t0)
 
@@ -115,12 +118,13 @@ def compute_crit_val(n, M, alpha, template, g):
     Z = dist1.rvs(2*n)
 
     test_vals = []
-
+    indices = list(range(2*n))
+    
     for _ in tqdm(range(M)):
-
-        # mb change to permutations?
-        x_indices = random.sample(range(0,2*n), n)
-        y_indices = [i for i in range(0,2*n) if i not in x_indices]
+        
+        random.shuffle(indices)
+        x_indices = indices[:n]
+        y_indices = indices[n:]
 
         X = Z[x_indices]
         Y = Z[y_indices]

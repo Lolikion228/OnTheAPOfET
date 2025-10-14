@@ -10,9 +10,14 @@ def d2_g(x):
  
 templates = {
     "normal": lambda n,h1,h2: stats.norm(
-                            loc = -h1 / (h2 + n**0.5),
-                            scale= 1 / (1 + h2/(n**0.5)) ),
-    "cauchy": None
+                                        loc = -h1 / (h2 + n**0.5),
+                                        scale= 1 / (1 + h2/(n**0.5)) 
+                                        ),
+
+    "cauchy": lambda n,h1,h2: stats.cauchy(
+                                        loc = -h1 / (h2 + n**0.5),
+                                        scale= 1 / (1 + h2/(n**0.5))
+                                        )
 }
 
 
@@ -113,7 +118,7 @@ def run_experiment(g, d2_g, template, h1=0,
 
 
 def test1():
-    template = templates["normal"]
+    template = templates["cauchy"]
     h1_vals = np.linspace(0,5,3)
     h2_vals = np.linspace(0,5,3)
     n_vals = [100,400,900]
@@ -124,16 +129,16 @@ def test1():
             for n in n_vals:
                 d2 = template(n, h1, h2)
                 for x in x_vals:
-                    print( abs( d1.cdf( x*(1+h1/n**0.5) + h2/n**0.5 ) - d2.cdf(x) ) )
+                    print( abs( d1.cdf( x*(1+h2/n**0.5) + h1/n**0.5 ) - d2.cdf(x) ) )
 
 def test2():
-    template = templates["normal"]
+    template = templates["cauchy"]
     d1 = template(1,0,0)
 
-    n = 400
+    n = 100
     M = 700
     alpha = 0.05
-    N = 500
+    N = 1000
 
     c = compute_crit_val(n, M, alpha, template, g)
 
@@ -149,14 +154,15 @@ def test2():
 def test3():
     template = templates["normal"]
     d1 = template(1,0,0)
-    n=100
+    n=900
     h1=0
     
-    N = 1000
-    cv = compute_crit_val(n, 1000, 0.05, template, g)
+    N = 10000
+    M = 10000
+    cv = compute_crit_val(n, M, 0.05, template, g)
 
 
-    for h2 in [1,2,3,4,5,6]:
+    for h2 in range(1,11):
         d2_n = template(n,h1,h2)
         e_pow = compute_empirical_power(n, N, cv, d1, d2_n, g)
         print(h2, e_pow)
@@ -170,15 +176,15 @@ def test():
 
 
 def main():
-    template = templates["normal"]
+    template = templates["cauchy"]
 
     run_experiment(g, d2_g, template, h1=0,
-                   h2_vals=[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+                   h2_vals=range(1, 11),
                    alpha=0.05, N=1000, M=700,
-                   sample_sizes=[100, 400, 900, 1600])
+                   sample_sizes=[100, 400, 900, 1600, 2000])
     
 
 
-# test()
-main()
+test()
+# main()
 
