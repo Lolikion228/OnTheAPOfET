@@ -4,15 +4,23 @@
 #include <boost/random.hpp>
 #include <iostream>
 #include "first.h"
+#include <random>
 
 double g(double x){
     return log(1 + x*x);
 }
 
 
+void print_vector(std::vector<double> V){
+    for(int i=0; i<V.size(); ++i){
+        std::cout << V[i] << " ";
+    }
+    std::cout << "\n";
+}
+
 int main() {
-    const int random_seed = 112;
-    boost::random::mt19937 gen(random_seed);
+    std::random_device rd;
+    boost::random::mt19937 gen(rd());
 
     
     // int sample_size = 8;
@@ -25,5 +33,35 @@ int main() {
     // std::vector<double> X{1, 2, 3, 4, 4, 2, 2, 3, 11, 12, 17, 6, 20, 14};
     // std::cout << quantile(X, 0.87) << "\n";
 
-    std::cout << compute_asymptotic_power(0.02, 0.1, 0.3) << "\n";
+    // std::cout << compute_asymptotic_power(0.02, 0.1, 0.3) << "\n";
+
+
+    // std::vector<double> Z{10,20,30,40,50,60};
+    // int sample_size = Z.size()/2;
+    // double *X = new double[sample_size];
+    // double *Y = new double[sample_size];
+    // print_vector(Z);
+    // random_split_direct(Z,sample_size , X, Y, gen);
+    // print_sample(X, sample_size);
+    // print_sample(Y, sample_size);
+
+
+
+    //SOMETHING IS WRONG
+    // int n = 100;
+    // int M = 200;
+    // double alpha = 0.1;
+    // boost::random::normal_distribution<> d1(0,1);
+    // double cv = compute_crit_val(n, M, alpha, d1, g, gen);
+    // std::cout << cv << "\n";
+
+    int n = 10;
+    int N = 10;
+    double cv = 59;
+    boost::random::normal_distribution<> d1(0, 1);
+    boost::random::normal_distribution<> d2(0.2 ,5);
+
+    double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
+    std::cout << ep << "\n";
+
 }

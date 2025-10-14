@@ -1,10 +1,13 @@
 #include "boost/random/normal_distribution.hpp"
 #include <boost/random.hpp>
 #include <iostream>
+#include <random>
 
 
 template <typename T>
-double *sample(boost::random::mt19937 gen, T dist, int sample_size){
+double *sample(T dist, int sample_size){
+    std::random_device rd;
+    boost::random::mt19937 gen(rd());
     double *sample = new double[sample_size];
     for(int i=0; i<sample_size; ++i){
         sample[i] = dist(gen);
@@ -12,12 +15,16 @@ double *sample(boost::random::mt19937 gen, T dist, int sample_size){
     return sample;
 }
 
+
+//
 void print_sample(double *sample, int sample_size);
 
 
+//
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size);
 
 
+//
 double compute_asymptotic_power(double alpha, double b, double a);
 
 
@@ -25,21 +32,25 @@ template <typename T>
 double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::function<double(double)> g, boost::random::mt19937 gen){
     double cnt_reject = 0;
     double etest_val;
-    double *X, *Y;
+
+    // double *X = new double[n];
+    // double *Y = new double[n];
 
     for(int i=0; i<N; ++i){
-        X = sample(gen, d1, n);
-        Y = sample(gen, d2, n);
+        double *X = sample(d1, n);
+        double *Y = sample(d2, n);
         etest_val = compute_etest(g, X, Y, n);
+        std::cout << etest_val << "\n";
         cnt_reject += ( (n * etest_val) >= crit_val );
-        delete[] X;
-        delete[] Y;
     }
 
+    // delete[] X;
+    // delete[] Y;
     return cnt_reject / N;
 }
 
 
+//
 template<typename T>
 double quantile(const std::vector<T>& data, double probability) {
     if (data.empty()) return 0.0;
@@ -67,6 +78,7 @@ double quantile(const std::vector<T>& data, double probability) {
 }
 
 
+//
 template<typename T>
 void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost::random::mt19937 gen) {
     std::shuffle(Z.begin(), Z.end(), gen);
@@ -82,7 +94,7 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost
 template <typename T>
 double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g, boost::random::mt19937 gen){
     
-    double *Z_ = sample(gen, d1, 2*n);
+    double *Z_ = sample(d1, 2*n);
     std::vector<double> Z;
     for(int i=0; i<2*n; ++i){
         Z.push_back(Z_[i]);
@@ -90,15 +102,16 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
     
     std::vector<double> test_vals;
     double etest_val;
-    double *X, *Y;
+    double *X = new double[n];
+    double *Y = new double[n];
 
     for(int i=0; i<M; ++i){
         random_split_direct(Z, n, X, Y, gen);
         etest_val = compute_etest(g, X, Y, n);
         test_vals.push_back(n * etest_val);
-        delete[] X;
-        delete[] Y;
     }
+    delete[] X;
+    delete[] Y;
 
     return quantile(test_vals, 1 - alpha);
 }

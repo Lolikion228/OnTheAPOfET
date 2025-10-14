@@ -180,13 +180,33 @@ def test5():
 def test6():
     print(compute_asymptotic_power(0.02, 0.1, 0.3))
 
+
+def test7():
+    n = 100
+    M = 200
+    alpha = 0.1
+    template = templates["normal"]
+    print(compute_crit_val(n, M, alpha, template, g))
+
+def test8():
+    n = 100
+    N = 10
+    cv = 59
+    template = templates["normal"]
+    d1 = stats.norm(0, 1)
+    d2 = stats.norm(0.2, 5)
+    ep = compute_empirical_power(n, N, cv, d1, d2, g)
+    print(ep)
+
 def test():
     # test1()
     # test2()
     # test3()
     # test4()
     # test5()
-    test6()
+    # test6()
+    # test7()
+    test8()
 
 
 
