@@ -33,19 +33,17 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::f
     double cnt_reject = 0;
     double etest_val;
 
-    // double *X = new double[n];
-    // double *Y = new double[n];
 
     for(int i=0; i<N; ++i){
         double *X = sample(d1, n);
         double *Y = sample(d2, n);
         etest_val = compute_etest(g, X, Y, n);
-        std::cout << etest_val << "\n";
         cnt_reject += ( (n * etest_val) >= crit_val );
+        delete[] X;
+        delete[] Y;
     }
 
-    // delete[] X;
-    // delete[] Y;
+    
     return cnt_reject / N;
 }
 
@@ -80,7 +78,9 @@ double quantile(const std::vector<T>& data, double probability) {
 
 //
 template<typename T>
-void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost::random::mt19937 gen) {
+void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
+    std::random_device rd;
+    boost::random::mt19937 gen(rd());
     std::shuffle(Z.begin(), Z.end(), gen);
 
     for(int i=0; i<n; ++i){
@@ -92,7 +92,7 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost
 
 
 template <typename T>
-double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g, boost::random::mt19937 gen){
+double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g){
     
     double *Z_ = sample(d1, 2*n);
     std::vector<double> Z;
@@ -106,7 +106,7 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
     double *Y = new double[n];
 
     for(int i=0; i<M; ++i){
-        random_split_direct(Z, n, X, Y, gen);
+        random_split_direct(Z, n, X, Y);
         etest_val = compute_etest(g, X, Y, n);
         test_vals.push_back(n * etest_val);
     }

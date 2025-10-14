@@ -45,23 +45,19 @@ int main() {
     // print_sample(X, sample_size);
     // print_sample(Y, sample_size);
 
-
-
-    //SOMETHING IS WRONG
-    // int n = 100;
-    // int M = 200;
-    // double alpha = 0.1;
+    // int n = 300;
+    // int M = 500;
+    // double alpha = 0.03;
     // boost::random::normal_distribution<> d1(0,1);
-    // double cv = compute_crit_val(n, M, alpha, d1, g, gen);
+    // double cv = compute_crit_val(n, M, alpha, d1, g);
     // std::cout << cv << "\n";
 
-    int n = 10;
-    int N = 10;
-    double cv = 59;
-    boost::random::normal_distribution<> d1(0, 1);
-    boost::random::normal_distribution<> d2(0.2 ,5);
-
-    double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
-    std::cout << ep << "\n";
+    // int n = 100;
+    // int N = 5000;
+    // double cv = 55;
+    // boost::random::normal_distribution<> d1(0, 1);
+    // boost::random::normal_distribution<> d2(0.2 ,5);
+    // double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
+    // std::cout << ep << "\n";
 
 }
