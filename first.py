@@ -50,8 +50,7 @@ def compute_etest2(g, X, Y):
     return phi
 
 
-# J1 J2 J3 can be precomputed
-def compute_integrals1(f, g):
+def compute_integrals(f, g, d2_g):
     integrals = dict()
 
     print("computing J1...")
@@ -77,29 +76,24 @@ def compute_integrals1(f, g):
     #             (-50, +50)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
     # integrals["J3"] = 0.763368 # for normal
     integrals["J3"] = 6.881056 # for cauchy
-
-
     print("J3 =", integrals["J3"])
     print("elapsed time for J3:", time.time()-t0)
-
-    return integrals
-
-def compute_integrals2(f, d2_g, h1, h2, integrals):
     
     print("computing J1_star...")
-    integrals["J1_star"] = 0.5 * (h1 ** 2) * nquad(
+    integrals["J1_star"] = 0.5 * nquad(
         lambda x,y: d2_g(x - y) * f(x) * f(y),
         ranges=[(-np.inf, +np.inf),
                 (-np.inf, +np.inf)])[0]
     print("J1_star =", integrals["J1_star"])
 
     print("computing J2_star...")
-    integrals["J2_star"] = 0.5 * (h2 ** 2) * nquad(
+    integrals["J2_star"] = 0.5 * nquad(
         lambda x,y: (y**2 - 0.5 * (x-y)**2) * d2_g(x - y) * f(x) * f(y),
         ranges=[(-np.inf, +np.inf),
                 (-np.inf, +np.inf)])[0]
     print("J2_star =", integrals["J2_star"])
-    
+
+
     return integrals
 
 
