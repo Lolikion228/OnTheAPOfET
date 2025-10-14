@@ -81,8 +81,8 @@ int main() {
     // std :: cout<<data[0];
 
 
-    int n = 100;
-    int N = 5000;
+    int n = 400;
+    int N = 10000;
     double cv = 51;
     boost::random::normal_distribution<> d1(0, 1);
     boost::random::normal_distribution<> d2(0.2 ,5);
