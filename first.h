@@ -1,7 +1,7 @@
-#include "boost/random/cauchy_distribution.hpp"
 #include "boost/random/normal_distribution.hpp"
 #include <boost/random.hpp>
 #include <iostream>
+
 
 template <typename T>
 double *sample(boost::random::mt19937 gen, T dist, int sample_size){
@@ -13,3 +13,92 @@ double *sample(boost::random::mt19937 gen, T dist, int sample_size){
 }
 
 void print_sample(double *sample, int sample_size);
+
+
+double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size);
+
+
+double compute_asymptotic_power(double alpha, double b, double a);
+
+
+template <typename T>
+double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::function<double(double)> g, boost::random::mt19937 gen){
+    double cnt_reject = 0;
+    double etest_val;
+    double *X, *Y;
+
+    for(int i=0; i<N; ++i){
+        X = sample(gen, d1, n);
+        Y = sample(gen, d2, n);
+        etest_val = compute_etest(g, X, Y, n);
+        cnt_reject += ( (n * etest_val) >= crit_val );
+        delete[] X;
+        delete[] Y;
+    }
+
+    return cnt_reject / N;
+}
+
+
+template<typename T>
+double quantile(const std::vector<T>& data, double probability) {
+    if (data.empty()) return 0.0;
+    if (probability < 0.0 || probability > 1.0) {
+        throw std::invalid_argument("Probability must be in [0, 1]");
+    }
+    
+    std::vector<T> sorted_data = data;
+    std::sort(sorted_data.begin(), sorted_data.end());
+    
+    if (probability == 0.0) return sorted_data.front();
+    if (probability == 1.0) return sorted_data.back();
+    
+    double index = probability * (sorted_data.size() - 1);
+    size_t lower_index = static_cast<size_t>(std::floor(index));
+    size_t upper_index = static_cast<size_t>(std::ceil(index));
+    
+    if (lower_index == upper_index) {
+        return sorted_data[lower_index];
+    }
+    
+    // Линейная интерполяция
+    double weight = index - lower_index;
+    return (1 - weight) * sorted_data[lower_index] + weight * sorted_data[upper_index];
+}
+
+
+template<typename T>
+std::pair<double*, double*> random_split_direct(std::vector<T> Z, size_t n, boost::random::mt19937 gen) {
+    std::shuffle(Z.begin(), Z.end(), gen);
+    double *X = new double[n];
+    double *Y = new double[n];
+
+    for(int i=0; i<n; ++i){
+        X = Z[i];
+        Y = Z[i+n];
+    }
+
+    return {X,Y};
+}
+
+
+template <typename T>
+double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g, boost::random::mt19937 gen){
+    
+    Z = sample(gen, d1, 2*n);
+    
+    std::vector<double> test_vals;
+    double etest_val;
+    double *X, *Y;
+
+    for(int i=0; i<M; ++i){
+        [X,Y] = random_split_direct(Z, n, gen);
+        etest_val = compute_etest(g, X, Y, n);
+        test_vals.push_back(n * etest_val);
+        delete[] X;
+        delete[] Y;
+    }
+
+    return quantile(test_vals, 1 - alpha);
+}
+
