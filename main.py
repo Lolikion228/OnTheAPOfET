@@ -185,6 +185,9 @@ def main():
     
 
 
-test()
+# test()
 # main()
 
+f = templates["cauchy"](1, 0, 0).pdf
+integrals = compute_integrals(f, g, d2_g)
+print(integrals)

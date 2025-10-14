@@ -1,14 +1,21 @@
-#include "boost/math/distributions/cauchy.hpp"
+
 #include "boost/random/cauchy_distribution.hpp"
+#include "boost/random/normal_distribution.hpp"
 #include <boost/random.hpp>
 #include <iostream>
+#include "first.h"
 
 
 
 int main() {
-    boost::random::mt19937 gen(std::time(0));
+    const int random_seed = 112;
+    boost::random::mt19937 gen(random_seed);
 
-    boost::random::cauchy_distribution<> mydist(0, 1);
+    boost::random::normal_distribution<> dist1(0, 1);
+    double *sample1 = sample(gen, dist1, 10);
+ 
 
-    std::cout << mydist(gen) << "\n";
+    print_sample(sample1, 10);
+
+    
 }
