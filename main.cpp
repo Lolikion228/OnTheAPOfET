@@ -35,7 +35,7 @@ int fat(){
 int main() {
     std::random_device rd;
     boost::random::mt19937 gen(rd());
-
+    auto start = std::chrono::high_resolution_clock::now();
     
     // int sample_size = 8;
     // double *X = new double[sample_size]{1, 2, 3, 4, 4, 2, 2, 3};
@@ -59,29 +59,28 @@ int main() {
     // print_sample(X, sample_size);
     // print_sample(Y, sample_size);
 
-    // int n = 1000;
-    // int M = 1000;
-    // double alpha = 0.03;
-    // boost::random::normal_distribution<> d1(0,1);
-    // double cv = compute_crit_val(n, M, alpha, d1, g);
-    // std::cout << cv << "\n";
+    int n = 1000;
+    int M = 1000;
+    double alpha = 0.03;
+    boost::random::normal_distribution<> d1(0,1);
+    double cv = compute_crit_val(n, M, alpha, d1, g);
+    std::cout << cv << "\n";
 
 
     
-    auto start = std::chrono::high_resolution_clock::now();
-    const int N = 100;
-    std::vector<int> data(N, 1);
+    
+    // const int N = 100;
+    // std::vector<int> data(N, 1);
 
-    #pragma omp parallel for
-    for(int i=0; i<N; ++i){
-        data[i] = fat();
-    }
+    // #pragma omp parallel for
+    // for(int i=0; i<N; ++i){
+    //     data[i] = fat();
+    // }
 
-   
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    std::cout << "Время выполнения: " << duration.count() / 1000000.0 << " секунд" << std::endl;
-    std :: cout<<data[0];
+    
+    // std :: cout<<data[0];
+
+
     // int n = 100;
     // int N = 50000;
     // double cv = 55;
@@ -89,5 +88,10 @@ int main() {
     // boost::random::normal_distribution<> d2(0.2 ,5);
     // double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
     // std::cout << ep << "\n";
+
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Время выполнения: " << duration.count() / 1000000.0 << " секунд" << std::endl;
 
 }
