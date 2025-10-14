@@ -182,15 +182,15 @@ def test6():
 
 
 def test7():
-    n = 300
-    M = 500
+    n = 1000
+    M = 1000
     alpha = 0.03
     template = templates["normal"]
     print(compute_crit_val(n, M, alpha, template, g))
 
 def test8():
-    n = 300
-    N = 5000
+    n = 100
+    N = 50000
     cv = 55
     template = templates["normal"]
     d1 = stats.norm(0, 1)

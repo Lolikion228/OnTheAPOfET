@@ -2,7 +2,7 @@
 #include <boost/random.hpp>
 #include <iostream>
 #include <random>
-
+#include <omp.h>
 
 template <typename T>
 double *sample(T dist, int sample_size){
@@ -27,7 +27,7 @@ double compute_etest(std::function<double(double)> g, double *X, double *Y, int 
 //
 double compute_asymptotic_power(double alpha, double b, double a);
 
-
+//
 template <typename T>
 double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::function<double(double)> g, boost::random::mt19937 gen){
     double cnt_reject = 0;
@@ -83,6 +83,7 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
     boost::random::mt19937 gen(rd());
     std::shuffle(Z.begin(), Z.end(), gen);
 
+   
     for(int i=0; i<n; ++i){
         X[i] = Z[i];
         Y[i] = Z[i+n];
@@ -91,6 +92,7 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
 }
 
 
+//
 template <typename T>
 double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g){
     
@@ -101,13 +103,12 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
     }
     
     std::vector<double> test_vals;
-    double etest_val;
     double *X = new double[n];
     double *Y = new double[n];
 
     for(int i=0; i<M; ++i){
         random_split_direct(Z, n, X, Y);
-        etest_val = compute_etest(g, X, Y, n);
+        double etest_val = compute_etest(g, X, Y, n);
         test_vals.push_back(n * etest_val);
     }
     delete[] X;

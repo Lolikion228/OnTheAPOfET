@@ -1,10 +1,13 @@
-
 #include "boost/random/cauchy_distribution.hpp"
 #include "boost/random/normal_distribution.hpp"
 #include <boost/random.hpp>
 #include <iostream>
 #include "first.h"
 #include <random>
+#include <chrono>
+#include "omp.h"
+
+
 
 double g(double x){
     return log(1 + x*x);
@@ -16,6 +19,17 @@ void print_vector(std::vector<double> V){
         std::cout << V[i] << " ";
     }
     std::cout << "\n";
+}
+
+
+int fat(){
+    int x = 2;
+    for(int i=0; i<10000; ++i){
+        for(int j=0; j<10000; ++j){
+           x = (x+1) % 2;
+        }
+    }
+    return x;
 }
 
 int main() {
@@ -45,15 +59,31 @@ int main() {
     // print_sample(X, sample_size);
     // print_sample(Y, sample_size);
 
-    // int n = 300;
-    // int M = 500;
+    // int n = 1000;
+    // int M = 1000;
     // double alpha = 0.03;
     // boost::random::normal_distribution<> d1(0,1);
     // double cv = compute_crit_val(n, M, alpha, d1, g);
     // std::cout << cv << "\n";
 
+
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    const int N = 100;
+    std::vector<int> data(N, 1);
+
+    #pragma omp parallel for
+    for(int i=0; i<N; ++i){
+        data[i] = fat();
+    }
+
+   
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Время выполнения: " << duration.count() / 1000000.0 << " секунд" << std::endl;
+    std :: cout<<data[0];
     // int n = 100;
-    // int N = 5000;
+    // int N = 50000;
     // double cv = 55;
     // boost::random::normal_distribution<> d1(0, 1);
     // boost::random::normal_distribution<> d2(0.2 ,5);
