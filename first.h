@@ -5,14 +5,12 @@
 #include <omp.h>
 
 template <typename T>
-double *sample(T dist, int sample_size){
+void sample(T dist, int sample_size, double *X){
     std::random_device rd;
     boost::random::mt19937 gen(rd());
-    double *sample = new double[sample_size];
     for(int i=0; i<sample_size; ++i){
-        sample[i] = dist(gen);
+        X[i] = dist(gen);
     }
-    return sample;
 }
 
 
@@ -33,17 +31,23 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::f
     double cnt_reject = 0;
 
 
-    #pragma omp parallel for reduction(+:cnt_reject)
-    for(int i=0; i<N; ++i){
-        double *X = sample(d1, n);
-        double *Y = sample(d2, n);
-        double etest_val = compute_etest(g, X, Y, n);
-        cnt_reject += ( (n * etest_val) >= crit_val );
+    #pragma omp parallel reduction(+:cnt_reject)
+    {   
+        double *X = new double[n];
+        double *Y = new double[n];
+        double etest_val;
+
+        #pragma omp for 
+        for(int i=0; i<N; ++i){
+            sample(d1, n, X);
+            sample(d2, n, Y);
+            cnt_reject += ( (n * compute_etest(g, X, Y, n)) >= crit_val );
+            
+        }
         delete[] X;
         delete[] Y;
     }
 
-    
     return cnt_reject / N;
 }
 
@@ -96,7 +100,8 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
 template <typename T>
 double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g){
     
-    double *Z_ = sample(d1, 2*n);
+    double *Z_ = new double[2*n];
+    sample(d1, 2*n, Z_);
     std::vector<double> Z;
     for(int i=0; i<2*n; ++i){
         Z.push_back(Z_[i]);

@@ -37,17 +37,17 @@ int main() {
     boost::random::mt19937 gen(rd());
     auto start = std::chrono::high_resolution_clock::now();
     
-    // int sample_size = 8;
-    // double *X = new double[sample_size]{1, 2, 3, 4, 4, 2, 2, 3};
-    // double *Y = new double[sample_size]{9, 9, 9, 9, 1, 3, 8, 8};
+    // int sample_size = 10;
+    // double *X = new double[sample_size]{14, -10, 1, 2, 3, 4, 4, 2, 2, 3};
+    // double *Y = new double[sample_size]{1, 20, 9, 9, 9, 9, 1, 3, 8, 8};
     // double etest_val = compute_etest(g, X, Y, sample_size);
     // std::cout << etest_val << "\n";
     
 
-    // std::vector<double> X{1, 2, 3, 4, 4, 2, 2, 3, 11, 12, 17, 6, 20, 14};
-    // std::cout << quantile(X, 0.87) << "\n";
+    // std::vector<double> X{2, 2, 3, 11, 12, 17, 6, 20, 14};
+    // std::cout << quantile(X, 0.39) << "\n";
 
-    // std::cout << compute_asymptotic_power(0.02, 0.1, 0.3) << "\n";
+    // std::cout << compute_asymptotic_power(0.14, 0.7, 0.1) << "\n";
 
 
     // std::vector<double> Z{10,20,30,40,50,60};
@@ -55,37 +55,35 @@ int main() {
     // double *X = new double[sample_size];
     // double *Y = new double[sample_size];
     // print_vector(Z);
-    // random_split_direct(Z,sample_size , X, Y, gen);
+    // random_split_direct(Z,sample_size , X, Y);
     // print_sample(X, sample_size);
     // print_sample(Y, sample_size);
+    // delete[] X;
+    // delete[] Y;
 
-    // int n = 100;
-    // int M = 1000;
-    // double alpha = 0.33;
+    // int n = 20;
+    // int M = 10;
+    // double alpha = 0.01;
     // boost::random::normal_distribution<> d1(0,1);
     // double cv = compute_crit_val(n, M, alpha, d1, g);
     // std::cout << cv << "\n";
 
 
     
-    
     // const int N = 100;
     // std::vector<int> data(N, 1);
-
     // #pragma omp parallel for
     // for(int i=0; i<N; ++i){
     //     data[i] = fat();
     // }
-
-    
     // std :: cout<<data[0];
 
 
-    int n = 400;
-    int N = 10000;
+    int n = 20;
+    int N = 20;
     double cv = 51;
     boost::random::normal_distribution<> d1(0, 1);
-    boost::random::normal_distribution<> d2(0.2 ,5);
+    boost::random::normal_distribution<> d2(0.2, 5);
     double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
     std::cout << ep << "\n";
 

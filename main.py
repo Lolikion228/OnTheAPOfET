@@ -169,27 +169,27 @@ def test3():
     
 
 def test4():
-    X = [1, 2, 3, 4, 4, 2, 2, 3]
-    Y = [9, 9, 9, 9, 1, 3, 8, 8]
+    X = [14, -10, 1, 2, 3, 4, 4, 2, 2, 3]
+    Y = [1, 20, 9, 9, 9, 9, 1, 3, 8, 8]
     print(compute_etest2(g, X, Y))
 
 def test5():
-    X = [1, 2, 3, 4, 4, 2, 2, 3, 11, 12, 17, 6, 20, 14]
-    print(np.quantile(X, 0.87))
+    X = [ 2, 2, 3, 11, 12, 17, 6, 20, 14]
+    print(np.quantile(X, 0.39))
 
 def test6():
-    print(compute_asymptotic_power(0.02, 0.1, 0.3))
+    print(compute_asymptotic_power(0.14, 0.7, 0.1))
 
 
 def test7():
-    n = 100
-    M = 1000
-    alpha = 0.33
+    n = 200
+    M = 700
+    alpha = 0.01
     template = templates["normal"]
     print(compute_crit_val(n, M, alpha, template, g))
 
 def test8():
-    n = 400
+    n = 100
     N = 10000
     cv = 51
     template = templates["normal"]
