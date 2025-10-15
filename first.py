@@ -69,13 +69,13 @@ def compute_integrals(f, g, d2_g):
 
     t0= time.time()
     print("computing J3...") # 22:51
-    # integrals["J3"] = nquad(
-    #     lambda x,y,z: g(x - y) * g(x - z) * f(x) * f(y) * f(z),
-    #     ranges=[(-50, +50),
-    #             (-50, +50),
-    #             (-50, +50)], opts={"epsabs":1e-3, "epsrel":1e-3})[0]
+    integrals["J3"] = nquad(
+        lambda x,y,z: g(x - y) * g(x - z) * f(x) * f(y) * f(z),
+        ranges=[(-100, +100),
+                (-100, +100),
+                (-100, +100)], opts={"epsabs":1e-6, "epsrel":1e-6})[0]
     # integrals["J3"] = 0.763368 # for normal
-    integrals["J3"] = 6.881056 # for cauchy
+    # integrals["J3"] = 6.881056 # for cauchy
     print("J3 =", integrals["J3"])
     print("elapsed time for J3:", time.time()-t0)
     

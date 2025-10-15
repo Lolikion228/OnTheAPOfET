@@ -83,14 +83,12 @@ int main() {
     // std::cout << ep << "\n";
 
    
-    
     double h1 = 0.0;
     std::vector<double> h2_vals{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6};
     double alpha = 0.05;
     int N = 3000;
     int M = 3000;
-    std::vector<int> sample_sizes{100, 400, 900, 1600, 2500, 3500, 4500};
-
+    std::vector<int> sample_sizes{100, 400, 900, 1500, 2000};
     run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes);
 
 
