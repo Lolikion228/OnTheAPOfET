@@ -7,6 +7,59 @@
 #include "first.h"
 
 
+boost::random::normal_distribution<double> get_normal(int n, double h1, double h2){
+    return boost::random::normal_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
+}
+
+boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h2){
+    return boost::random::cauchy_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
+}
+
+
+
+
+void print_vector(std::vector<double> V){
+    for(int i=0; i<V.size(); ++i){
+        std::cout << V[i] << " ";
+    }
+    std::cout << "\n";
+}
+
+std::vector<double> read_numbers_from_file(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<double> numbers;
+    
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file: " + filename);
+    }
+    
+    double number;
+    while (file >> number) {
+        numbers.push_back(number);
+    }
+    
+    file.close();
+    return numbers;
+}
+
+std::vector<double> read_integrals(DistributionType d_type){
+    switch (d_type)
+    {
+    case DistributionType::NORMAL:
+        return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal.txt");
+        break;
+    case DistributionType::CAUCHY:
+        return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/cauchy.txt");
+        break;
+    
+    default:
+        std::cout << "WRONG INDEX FOR READ_INTEGRALS\n";
+        exit(1);
+    }
+}
+
+
+
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
     double phi_a = 0, phi_b = 0, phi_ab = 0;
 

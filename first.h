@@ -15,12 +15,7 @@ void sample(T dist, int sample_size, double *X){
 }
 
 
-void print_vector(std::vector<double> V){
-    for(int i=0; i<V.size(); ++i){
-        std::cout << V[i] << " ";
-    }
-    std::cout << "\n";
-}
+void print_vector(std::vector<double> V);
 
 
 //
@@ -145,40 +140,10 @@ enum class DistributionType {
     CAUCHY = 1
 };
 
-std::vector<double> read_numbers_from_file(const std::string& filename) {
-    std::ifstream file(filename);
-    std::vector<double> numbers;
-    
-    if (!file.is_open()) {
-        throw std::runtime_error("Cannot open file: " + filename);
-    }
-    
-    double number;
-    while (file >> number) {
-        numbers.push_back(number);
-    }
-    
-    file.close();
-    return numbers;
-}
-
-std::vector<double> read_integrals(DistributionType d_type){
-    switch (d_type)
-    {
-    case DistributionType::NORMAL:
-        read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal.txt");
-        break;
-    case DistributionType::CAUCHY:
-        read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/cauchy.txt");
-        break;
-    
-    default:
-        std::cout << "WRONG INDEX FOR READ_INTEGRALS\n";
-        exit(1);
-    }
-}
+std::vector<double> read_numbers_from_file(const std::string& filename);
 
 
+std::vector<double> read_integrals(DistributionType d_type);
 
 
 template <typename T>
@@ -215,21 +180,16 @@ std::pair<std::vector<double>, double> experiment_step(std::function<double(doub
 
     double a_pow = compute_asymptotic_power(alpha, b, a);
 
-    return {emp_powers, a_pow}
+    return {emp_powers, a_pow};
 
 }
 
 
 
-boost::random::normal_distribution<double> get_normal(int n, double h1, double h2){
-    return boost::random::normal_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
-}
-
-boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h2){
-    return boost::random::cauchy_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
-}
+boost::random::normal_distribution<double> get_normal(int n, double h1, double h2);
 
 
+boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h2);
 
 
 void run_experiment(std::function<double(double)> g,
