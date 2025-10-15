@@ -13,12 +13,8 @@ double g(double x){
     return log(1 + x*x);
 }
 
-
-void print_vector(std::vector<double> V){
-    for(int i=0; i<V.size(); ++i){
-        std::cout << V[i] << " ";
-    }
-    std::cout << "\n";
+double d2_g(double x){
+    return 2 * (1 - x*x) / pow((1 + x * x),2);
 }
 
 
@@ -37,6 +33,7 @@ int main() {
     boost::random::mt19937 gen(rd());
     auto start = std::chrono::high_resolution_clock::now();
     
+
     // int sample_size = 10;
     // double *X = new double[sample_size]{14, -10, 1, 2, 3, 4, 4, 2, 2, 3};
     // double *Y = new double[sample_size]{1, 20, 9, 9, 9, 9, 1, 3, 8, 8};
@@ -79,14 +76,22 @@ int main() {
     // std :: cout<<data[0];
 
 
-    int n = 20;
-    int N = 20;
-    double cv = 51;
-    boost::random::normal_distribution<> d1(0, 1);
-    boost::random::normal_distribution<> d2(0.2, 5);
-    double ep = compute_empirical_power(n, N, cv, d1, d2, g, gen);
-    std::cout << ep << "\n";
+    // int n = 20;
+    // int N = 20;
+    // double cv = 51;
+    // boost::random::normal_distribution<> d1(0, 1);
+    // boost::random::normal_distribution<> d2(0.2, 5);
+    // double ep = compute_empirical_power(n, N, cv, d1, d2, g);
+    // std::cout << ep << "\n";
 
+    double h1 = 0.0;
+    std::vector<double> h2_vals{1, 2, 23};
+    double alpha = 0.05;
+    int N = 100;
+    int M = 100;
+    std::vector<int> sample_sizes{50, 100};
+
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);

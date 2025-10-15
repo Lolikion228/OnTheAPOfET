@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include <omp.h>
+#include <fstream>
 
 template <typename T>
 void sample(T dist, int sample_size, double *X){
@@ -11,6 +12,14 @@ void sample(T dist, int sample_size, double *X){
     for(int i=0; i<sample_size; ++i){
         X[i] = dist(gen);
     }
+}
+
+
+void print_vector(std::vector<double> V){
+    for(int i=0; i<V.size(); ++i){
+        std::cout << V[i] << " ";
+    }
+    std::cout << "\n";
 }
 
 
@@ -27,7 +36,7 @@ double compute_asymptotic_power(double alpha, double b, double a);
 
 //
 template <typename T>
-double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::function<double(double)> g, boost::random::mt19937 gen){
+double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::function<double(double)> g){
     double cnt_reject = 0;
 
 
@@ -131,14 +140,36 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
 }
 
 
-// 0 for normal
-// 1 for cauchy
-std::vector<double> read_integrals(int index){
-    switch (index)
+enum class DistributionType {
+    NORMAL = 0,
+    CAUCHY = 1
+};
+
+std::vector<double> read_numbers_from_file(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<double> numbers;
+    
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file: " + filename);
+    }
+    
+    double number;
+    while (file >> number) {
+        numbers.push_back(number);
+    }
+    
+    file.close();
+    return numbers;
+}
+
+std::vector<double> read_integrals(DistributionType d_type){
+    switch (d_type)
     {
-    case 0:
+    case DistributionType::NORMAL:
+        read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal.txt");
         break;
-    case 1:
+    case DistributionType::CAUCHY:
+        read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/cauchy.txt");
         break;
     
     default:
@@ -149,12 +180,17 @@ std::vector<double> read_integrals(int index){
 
 
 
-void experiment_step(std::function<double(double)> g,
+
+template <typename T>
+std::pair<std::vector<double>, double> experiment_step(std::function<double(double)> g,
                      std::function<double(double)> d2_g,
                     double h1, double h2, double alpha,
                     int N, int M, std::vector<int> sample_sizes,
                     std::vector<double> integrals,
-                    std::vector<double> crit_vals){
+                    std::vector<double> crit_vals,
+                    T dist_template){
+
+    auto d1 = dist_template(1,0,0);
 
     double J1 = integrals[0];
     double J2 = integrals[1];
@@ -164,37 +200,40 @@ void experiment_step(std::function<double(double)> g,
 
     double b1 = sqrt(abs(J1_star));
     double b2 = sqrt(abs(J2_star));
-    double b = sqrt( b1 * b1 + b2 * b2);
     
     double a = pow( J2 + J1 * J1 - 2 * J3, 0.25);
+    double b = sqrt( b1 * b1 + b2 * b2);
+    
+    std::vector<double> emp_powers;
+
+    for (int i=0; i<sample_sizes.size(); ++i){
+        int n = sample_sizes[i];
+        auto d2_n = dist_template(n, h1, h2);
+        double e_pow = compute_empirical_power(n, N, crit_vals[i], d1, d2_n, g);
+        emp_powers.push_back(e_pow);
+    }
+
+    double a_pow = compute_asymptotic_power(alpha, b, a);
+
+    return {emp_powers, a_pow}
 
 }
 
 
-template <typename T>
+
+boost::random::normal_distribution<double> get_normal(int n, double h1, double h2){
+    return boost::random::normal_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
+}
+
+boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h2){
+    return boost::random::cauchy_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
+}
+
+
+
+
 void run_experiment(std::function<double(double)> g,
                     std::function<double(double)> d2_g,
                     double h1, std::vector<double> h2_vals,
                     double alpha, int N, int M,
-                    std::vector<int> sample_sizes,
-                    T dist_template, int exp_index)
-{
-    auto d1 = ...;
-    auto f = ...;
-
-    // J1 J2 J3 J1_ J2_
-    std::vector<double> integrals = read_integrals(exp_index);
-    
-    std::vector<double> crit_vals;
-    for(int n : sample_sizes){
-        double cv = compute_crit_val(n, M, alpha, d1, g);
-        crit_vals.push_back(cv);
-    }
-
-    
-    for(double h2 : h2_vals){
-        auto [e_pow, a_pow] = ...;
-    }
-
-
-}
+                    std::vector<int> sample_sizes);
