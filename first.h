@@ -5,6 +5,24 @@
 #include <omp.h>
 #include <fstream>
 
+
+#include <chrono>
+
+class Timer {
+private:
+    std::chrono::time_point<std::chrono::high_resolution_clock> start;
+    
+public:
+    Timer() : start(std::chrono::high_resolution_clock::now()) {}
+    
+    ~Timer() {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        std::cout << "Время выполнения: " << duration.count()/ 1000000.0 << " сек" << std::endl;
+    }
+};
+
+
 template <typename T>
 void sample(T dist, int sample_size, double *X){
     std::random_device rd;
@@ -172,7 +190,9 @@ std::pair<std::vector<double>, double> experiment_step(std::function<double(doub
     std::vector<double> emp_powers;
 
     for (int i=0; i<sample_sizes.size(); ++i){
+        Timer t1;
         int n = sample_sizes[i];
+        std::cout << "n = " << n << "  ||  ";
         auto d2_n = dist_template(n, h1, h2);
         double e_pow = compute_empirical_power(n, N, crit_vals[i], d1, d2_n, g);
         emp_powers.push_back(e_pow);

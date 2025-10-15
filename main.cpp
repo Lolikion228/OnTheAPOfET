@@ -29,9 +29,7 @@ int fat(){
 }
 
 int main() {
-    std::random_device rd;
-    boost::random::mt19937 gen(rd());
-    auto start = std::chrono::high_resolution_clock::now();
+
     
 
     // int sample_size = 10;
@@ -84,17 +82,16 @@ int main() {
     // double ep = compute_empirical_power(n, N, cv, d1, d2, g);
     // std::cout << ep << "\n";
 
+   
+    
     double h1 = 0.0;
-    std::vector<double> h2_vals{1, 2, 3, 4};
+    std::vector<double> h2_vals{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6};
     double alpha = 0.05;
-    int N = 200;
-    int M = 200;
-    std::vector<int> sample_sizes{100, 400, 900};
+    int N = 3000;
+    int M = 3000;
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2500, 3500, 4500};
 
     run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    std::cout << "Время выполнения: " << duration.count() / 1000000.0 << " секунд" << std::endl;
 
 }
