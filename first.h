@@ -130,3 +130,71 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
     return quantile(test_vals, 1 - alpha);
 }
 
+
+// 0 for normal
+// 1 for cauchy
+std::vector<double> read_integrals(int index){
+    switch (index)
+    {
+    case 0:
+        break;
+    case 1:
+        break;
+    
+    default:
+        std::cout << "WRONG INDEX FOR READ_INTEGRALS\n";
+        exit(1);
+    }
+}
+
+
+
+void experiment_step(std::function<double(double)> g,
+                     std::function<double(double)> d2_g,
+                    double h1, double h2, double alpha,
+                    int N, int M, std::vector<int> sample_sizes,
+                    std::vector<double> integrals,
+                    std::vector<double> crit_vals){
+
+    double J1 = integrals[0];
+    double J2 = integrals[1];
+    double J3 = integrals[2];
+    double J1_star = integrals[3] * h1 * h1;
+    double J2_star = integrals[4] * h2 * h2;
+
+    double b1 = sqrt(abs(J1_star));
+    double b2 = sqrt(abs(J2_star));
+    double b = sqrt( b1 * b1 + b2 * b2);
+    
+    double a = pow( J2 + J1 * J1 - 2 * J3, 0.25);
+
+}
+
+
+template <typename T>
+void run_experiment(std::function<double(double)> g,
+                    std::function<double(double)> d2_g,
+                    double h1, std::vector<double> h2_vals,
+                    double alpha, int N, int M,
+                    std::vector<int> sample_sizes,
+                    T dist_template, int exp_index)
+{
+    auto d1 = ...;
+    auto f = ...;
+
+    // J1 J2 J3 J1_ J2_
+    std::vector<double> integrals = read_integrals(exp_index);
+    
+    std::vector<double> crit_vals;
+    for(int n : sample_sizes){
+        double cv = compute_crit_val(n, M, alpha, d1, g);
+        crit_vals.push_back(cv);
+    }
+
+    
+    for(double h2 : h2_vals){
+        auto [e_pow, a_pow] = ...;
+    }
+
+
+}

@@ -40,3 +40,4 @@ void print_sample(double *sample, int sample_size){
     }
     std::cout << "\n";
 }
+
