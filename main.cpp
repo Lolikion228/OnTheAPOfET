@@ -84,12 +84,22 @@ int main() {
 
    
     double h1 = 0.0;
-    std::vector<double> h2_vals{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6};
+    std::vector<double> h2_vals{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10};
     double alpha = 0.05;
-    int N = 3000;
-    int M = 3000;
-    std::vector<int> sample_sizes{100, 400, 900, 1500, 2000};
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes);
+    int N = 5000;
+    int M = 5000;
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2500, 3000, 4000, 5000};
+    
+    std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
+    std::vector<double> integrals_c = read_integrals(DistributionType::CAUCHY);
+
+    std::cout<< "NORMAL:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals_n);
+    std::cout << "=============================\n";
+    std::cout << "=============================\n\n";
+    std::cout<< "CAUCHY:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals_c);
+
 
 
 }
