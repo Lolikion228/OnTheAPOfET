@@ -1,32 +1,15 @@
 library(knitr)
 library(kableExtra)
 
-df <- read.csv('./tex_shit/df.csv')[ , 1:11]
-new_names <- gsub("h2\\.\\.\\.", "h2=", names(df))
-new_names[1] <- ""
-names(df) <- new_names
-
-
-table <- kable(df, "latex", booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = "hold_position")
-
-
-correct_document <- paste(
-"\\documentclass{article}",
-"\\usepackage[utf8]{inputenc}",
-"\\usepackage[russian]{babel}",
-"\\usepackage{booktabs}",
-"\\usepackage{amsmath}",
-"\\usepackage{graphicx}",
-"\\usepackage{float}",
-"\\begin{document}",
-"",
-table,
-"",
-"\\end{document}",
-sep = "\n"
-)
-
-correct_document <- gsub("\\\\begin\\{tabular\\}", "\\\\hspace*{-2cm}\\\\begin\\{tabular\\}\n", correct_document)
-
-writeLines(correct_document, "./tex_shit/table.tex")
+for( fname in list.files(path = "./tex_shit/csvs", full.names = F)){
+  df <- read.csv(paste("./tex_shit/csvs/", fname, sep=""))
+  new_names <- gsub("h2\\.\\.\\.", "h2=", names(df))
+  new_names[1] <- ""
+  names(df) <- new_names
+  # print(fname)
+  # print(df)
+  table <- kable(df, "latex", booktabs = TRUE, digits = 3) %>%
+    kable_styling(latex_options = "hold_position")
+  table <- gsub("\\\\begin\\{tabular\\}", "\\\\hspace*{-4.3cm}\\\\begin\\{tabular\\}\n", table)
+  writeLines(table, paste("./tex_shit/tables/", substr(fname ,1, nchar(fname)-4), ".tex" ,sep=""))
+}

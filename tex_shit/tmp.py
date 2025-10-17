@@ -86,30 +86,18 @@ def create_transposed_dataframe_with_n(results, n_values):
     return df
 
 def main():
-    filename = './notes/cauchy_res.txt'  # Замените на имя вашего файла
-    
-  
+
+
+    filename = './notes/cauchy_res3.txt'  # Замените на имя вашего файла
     results, n_values = parse_file(filename)
     df = create_transposed_dataframe_with_n(results, n_values)
-    df.to_csv('./tex_shit/df.csv', columns=df.columns)
-    
-    # f = open('./table.tex', 'w')
-    # f.writelines([
-    #     "\\documentclass{article}\n",
-    #     "\\usepackage[utf8]{inputenc}\n",
-    #     "\\usepackage[T2A]{fontenc}\n",
-    #     "\\usepackage[russian]{babel}\n",
-    #     "\\usepackage{booktabs}\n",
-    #     "\\usepackage{amsmath}\n",
-    #     "\\usepackage{graphicx}\n",
-    #     "\\usepackage{float}\n",
-    #     "\\begin{document}\n"
-    # ])
-    # df.to_latex(buf = f, float_format="%.3f", bold_rows=True, caption='ABOBA', position='h!')
-    # f.write("\\end{document}")
-    # f.close()
+    df.to_csv('./tex_shit/csvs/cauchy3.csv', columns=df.columns)
 
-        
+    filename = './notes/normal_res3.txt'  # Замените на имя вашего файла
+    results, n_values = parse_file(filename)
+    df = create_transposed_dataframe_with_n(results, n_values)
+    df.to_csv('./tex_shit/csvs/normal3.csv', columns=df.columns)
+
 
 
 if __name__ == "__main__":
