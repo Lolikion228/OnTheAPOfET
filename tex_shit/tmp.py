@@ -64,7 +64,7 @@ def create_transposed_dataframe_with_n(results, n_values):
     
     # Добавляем emp_powers с n
     for i in range(num_emp_powers):
-        row_name = f"emp_power (n={n_values[h2_values[0]][i]})"
+        row_name = f"EP (n={n_values[h2_values[0]][i]})"
         index_names.append(row_name)
         
         row_data = []
@@ -76,7 +76,7 @@ def create_transposed_dataframe_with_n(results, n_values):
         data.append(row_data)
     
     # Добавляем asp_power как отдельную строку
-    index_names.append('asp_power')
+    index_names.append('AP')
     asp_power_row = [results[h2][-1] for h2 in h2_values]  # последний элемент каждого списка
     data.append(asp_power_row)
     

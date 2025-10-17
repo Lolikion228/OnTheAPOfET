@@ -1,7 +1,7 @@
 library(knitr)
 library(kableExtra)
 
-df <- read.csv('./tex_shit/df.csv')[ , 1:9]
+df <- read.csv('./tex_shit/df.csv')[ , 1:11]
 new_names <- gsub("h2\\.\\.\\.", "h2=", names(df))
 new_names[1] <- ""
 names(df) <- new_names
@@ -27,5 +27,6 @@ table,
 sep = "\n"
 )
 
+correct_document <- gsub("\\\\begin\\{tabular\\}", "\\\\hspace*{-2cm}\\\\begin\\{tabular\\}\n", correct_document)
 
 writeLines(correct_document, "./tex_shit/table.tex")
