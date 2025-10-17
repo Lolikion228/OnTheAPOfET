@@ -83,14 +83,14 @@ int main() {
     // std::cout << ep << "\n";
 
 
-    double h1 = 0.0;
+    
     std::vector<double> h2_vals_n{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
     std::vector<double> h2_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
+    double h1 = 0.0;
     double alpha = 0.05;
     int N = 5000;
     int M = 5000;
-    std::vector<int> sample_sizes{100, 400, 900, 1600, 2000};
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2000, 3000};
     
     std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
     std::vector<double> integrals_c = read_integrals(DistributionType::CAUCHY);
