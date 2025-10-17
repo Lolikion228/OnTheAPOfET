@@ -10,6 +10,6 @@ for( fname in list.files(path = "./tex_shit/csvs", full.names = F)){
   # print(df)
   table <- kable(df, "latex", booktabs = TRUE, digits = 3) %>%
     kable_styling(latex_options = "hold_position")
-  table <- gsub("\\\\begin\\{tabular\\}", "\\\\hspace*{-2.3cm}\\\\begin\\{tabular\\}\n", table)
+  table <- gsub("\\\\begin\\{tabular\\}", "\\\\hspace*{-1.0cm}\\\\begin\\{tabular\\}\n", table)
   writeLines(table, paste("./tex_shit/tables/", substr(fname ,1, nchar(fname)-4), ".tex" ,sep=""))
 }
