@@ -8,7 +8,6 @@
 #include "omp.h"
 
 
-
 double g(double x){
     return log(1 + x*x);
 }
@@ -28,8 +27,9 @@ int fat(){
     return x;
 }
 
-int main() {
 
+int main() {
+    
     
 
     // int sample_size = 10;
@@ -82,7 +82,7 @@ int main() {
     // double ep = compute_empirical_power(n, N, cv, d1, d2, g);
     // std::cout << ep << "\n";
 
-   
+
     double h1 = 0.0;
     std::vector<double> h2_vals{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10};
     double alpha = 0.05;
