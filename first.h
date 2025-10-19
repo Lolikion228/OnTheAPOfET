@@ -215,7 +215,7 @@ boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h
 template <typename T>
 void run_experiment(std::function<double(double)> g,
                     std::function<double(double)> d2_g,
-                    double h1, std::vector<double> h2_vals,
+                    std::vector<double> h1_vals, std::vector<double> h2_vals,
                     double alpha, int N, int M,
                     std::vector<int> sample_sizes,
                     T dist_template, std::vector<double> integrals  )
@@ -235,9 +235,12 @@ void run_experiment(std::function<double(double)> g,
     }
     std::cout << "\n";
     
-    for(double h2 : h2_vals){
+    for(double h1 : h1_vals){
+        for(double h2 : h2_vals){
         {
         Timer t1;
+        {
+        std::cout << "h1 = " << h1 << "\n";
         std::cout << "h2 = " << h2 << "\n";
         auto [e_pow, a_pow] = experiment_step(g, d2_g, h1, h2,
             alpha, N, M, sample_sizes, integrals, crit_vals, dist_template);
@@ -246,7 +249,9 @@ void run_experiment(std::function<double(double)> g,
         std::cout << "asp_power = " << a_pow << "\n";
         }
         std::cout << "\n\n";
+        }
     }
 
 
+}
 }

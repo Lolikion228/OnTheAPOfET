@@ -84,9 +84,12 @@ int main() {
 
 
     
-    std::vector<double> h2_vals_n{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
-    std::vector<double> h2_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    double h1 = 0.0;
+    // std::vector<double> h2_vals_n{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
+    // std::vector<double> h2_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<double> h2_vals_n{0.0};
+    std::vector<double> h2_vals_c{0.0};
+    std::vector<double>  h1_vals_n{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<double>  h1_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     double alpha = 0.05;
     int N = 5000;
     int M = 5000;
@@ -96,11 +99,11 @@ int main() {
     std::vector<double> integrals_c = read_integrals(DistributionType::CAUCHY);
 
     std::cout<< "NORMAL:\n";
-    run_experiment(g, d2_g, h1, h2_vals_n, alpha, N, M, sample_sizes, get_normal, integrals_n);
+    run_experiment(g, d2_g, h1_vals_n, h2_vals_n, alpha, N, M, sample_sizes, get_normal, integrals_n);
     std::cout << "=============================\n";
     std::cout << "=============================\n\n";
     std::cout<< "CAUCHY:\n";
-    run_experiment(g, d2_g, h1, h2_vals_c, alpha, N, M, sample_sizes, get_cauchy, integrals_c);
+    run_experiment(g, d2_g, h1_vals_c, h2_vals_c, alpha, N, M, sample_sizes, get_cauchy, integrals_c);
 
 
 
