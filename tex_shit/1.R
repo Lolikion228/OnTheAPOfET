@@ -3,7 +3,7 @@ library(kableExtra)
 
 for( fname in list.files(path = "./tex_shit/csvs", full.names = F)){
   df <- read.csv(paste("./tex_shit/csvs/", fname, sep=""))
-  new_names <- gsub("h2\\.\\.\\.", "h2=", names(df))
+  new_names <- gsub("h1\\.\\.\\.", "h1=", names(df))
   new_names[1] <- ""
   names(df) <- new_names
   # print(fname)

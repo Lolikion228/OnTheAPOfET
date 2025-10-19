@@ -238,8 +238,9 @@ void run_experiment(std::function<double(double)> g,
     for(double h1 : h1_vals){
         for(double h2 : h2_vals){
         {
-        Timer t1;
+        
         {
+        Timer t1;
         std::cout << "h1 = " << h1 << "\n";
         std::cout << "h2 = " << h2 << "\n";
         auto [e_pow, a_pow] = experiment_step(g, d2_g, h1, h2,
