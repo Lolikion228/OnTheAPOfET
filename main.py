@@ -224,6 +224,6 @@ def main():
 # test()
 # main()
 
-f = templates["normal"](1, 0, 0).pdf
+f = templates["cauchy"](1, 0, 0).pdf
 integrals = compute_integrals(f, g, d2_g)
 print(integrals)

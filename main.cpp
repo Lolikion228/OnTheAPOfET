@@ -17,21 +17,90 @@ double d2_g(double x){
 }
 
 
-int fat(){
-    int x = 2;
-    for(int i=0; i<10000; ++i){
-        for(int j=0; j<10000; ++j){
-           x = (x+1) % 2;
-        }
-    }
-    return x;
+
+// normal with h2=0
+void ex1(){
+    std::vector<double>  h1_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    double h2 = 0.0;
+    double alpha = 0.05;
+
+    std::vector<int> sample_sizes{100, 400};
+    int N = 500;
+    int M = 500;
+
+    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
+    
+    std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
+
+    std::cout<< "NORMAL:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_test);
+    std::cout << "================================\n";
+    std::cout << "================================\n\n";
+}
+
+//normal with h1=0
+void ex2(){
+    std::vector<double>  h2_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    double h1 = 0.0;
+    double alpha = 0.05;
+
+    std::vector<int> sample_sizes{100, 400};
+    int N = 500;
+    int M = 500;
+
+    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
+    
+    std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
+
+    std::cout<< "NORMAL:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_test);
+    std::cout << "================================\n";
+    std::cout << "================================\n\n";
 }
 
 
-int main() {
-    
-    
+// cauchy with h2=0
+void ex3(){
+    std::vector<double>  h1_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    double h2 = 0.0;
+    double alpha = 0.05;
 
+    std::vector<int> sample_sizes{100, 400};
+    int N = 500;
+    int M = 500;
+
+    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
+    
+    std::vector<double> integrals_n = read_integrals(DistributionType::CAUCHY);
+
+    std::cout<< "NORMAL:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_test);
+    std::cout << "================================\n";
+    std::cout << "================================\n\n";
+}
+
+// cauchy with h1=0
+void ex4(){
+    std::vector<double>  h2_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    double h1 = 0.0;
+    double alpha = 0.05;
+
+    std::vector<int> sample_sizes{100, 400};
+    int N = 500;
+    int M = 500;
+
+    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
+    
+    std::vector<double> integrals_n = read_integrals(DistributionType::CAUCHY);
+
+    std::cout<< "NORMAL:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_test);
+    std::cout << "================================\n";
+    std::cout << "================================\n\n";
+}
+
+
+void testing(){
     // int sample_size = 10;
     // double *X = new double[sample_size]{14, -10, 1, 2, 3, 4, 4, 2, 2, 3};
     // double *Y = new double[sample_size]{1, 20, 9, 9, 9, 9, 1, 3, 8, 8};
@@ -82,29 +151,12 @@ int main() {
     // double ep = compute_empirical_power(n, N, cv, d1, d2, g);
     // std::cout << ep << "\n";
 
-
-    
-    // std::vector<double> h2_vals_n{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
-    // std::vector<double> h2_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
-    std::vector<double>  h1_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    // std::vector<double>  h2_vals_c{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    double h2 = 0.0;
-    double alpha = 0.05;
-    int N = 500;
-    int M = 500;
-    std::vector<int> sample_sizes{100, 400};
-    
-    std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
-    std::vector<double> integrals_c = read_integrals(DistributionType::CAUCHY);
-
-    // std::cout<< "NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals_n, h2_vals_n, alpha, N, M, sample_sizes, get_normal, integrals_n);
-    // std::cout << "=============================\n";
-    // std::cout << "=============================\n\n";
-    std::cout<< "CAUCHY:\n";
-    run_experiment(g, d2_g, h1_vals_c, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_c);
+}
 
 
-
+int main() {
+    ex1();
+    ex2();
+    ex3();
+    ex4();
 }
