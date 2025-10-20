@@ -215,14 +215,55 @@ boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h
 template <typename T>
 void run_experiment(std::function<double(double)> g,
                     std::function<double(double)> d2_g,
-                    std::vector<double> h1_vals, std::vector<double> h2_vals,
+                    double h1, std::vector<double> h2_vals,
                     double alpha, int N, int M,
                     std::vector<int> sample_sizes,
                     T dist_template, std::vector<double> integrals  )
 {   
 
+    std::cout << "N = " << N << "\n"; 
+    std::cout << "M = " << M << "\n"; 
+    std::cout << "alpha = " << alpha << "\n"; 
+    std::cout << "h1 = " << h1 << "\n\n"; 
+    auto d1 = dist_template(1,0,0);
 
+    std::vector<double> crit_vals;
+    std::cout << "computing crit_vals...\n";
+    for(int n : sample_sizes){
+        Timer t1;
+        std::cout << "n = " << n << "  ||  ";
+        double cv = compute_crit_val(n, M, alpha, d1, g);
+        crit_vals.push_back(cv);
+    }
+    std::cout << "\n";
+    
+    for(double h2 : h2_vals){
+        {
+        Timer t1;
+        std::cout << "h2 = " << h2 << "\n";
+        auto [e_pow, a_pow] = experiment_step(g, d2_g, h1, h2,
+            alpha, N, M, sample_sizes, integrals, crit_vals, dist_template);
+        std::cout << "emp_powers = ";
+        print_vector(e_pow);
+        std::cout << "asp_power = " << a_pow << "\n";
+        }
+        std::cout << "\n\n";  
+    }
+}
 
+template <typename T>
+void run_experiment(std::function<double(double)> g,
+                    std::function<double(double)> d2_g,
+                    std::vector<double> h1_vals, double h2, 
+                    double alpha, int N, int M,
+                    std::vector<int> sample_sizes,
+                    T dist_template, std::vector<double> integrals  )
+{   
+
+    std::cout << "N = " << N << "\n"; 
+    std::cout << "M = " << M << "\n"; 
+    std::cout << "alpha = " << alpha << "\n"; 
+    std::cout << "h2 = " << h2 << "\n\n"; 
     auto d1 = dist_template(1,0,0);
 
     std::vector<double> crit_vals;
@@ -236,23 +277,15 @@ void run_experiment(std::function<double(double)> g,
     std::cout << "\n";
     
     for(double h1 : h1_vals){
-        for(double h2 : h2_vals){
-        {
-        
         {
         Timer t1;
         std::cout << "h1 = " << h1 << "\n";
-        std::cout << "h2 = " << h2 << "\n";
         auto [e_pow, a_pow] = experiment_step(g, d2_g, h1, h2,
             alpha, N, M, sample_sizes, integrals, crit_vals, dist_template);
         std::cout << "emp_powers = ";
         print_vector(e_pow);
         std::cout << "asp_power = " << a_pow << "\n";
         }
-        std::cout << "\n\n";
-        }
+        std::cout << "\n\n";  
     }
-
-
-}
 }
