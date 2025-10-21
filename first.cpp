@@ -60,7 +60,22 @@ std::vector<double> read_integrals(DistributionType d_type){
 
 
 
-double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
+
+double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+    double res = 0;
+
+    #pragma omp parallel for reduction(+:res)
+    for(int i=0; i<sample_size; ++i){
+        for(int j=0; j<sample_size; ++j){
+            res += (Y[j] <= X[i]);
+        }
+    }
+
+    return res;
+}
+
+
+double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
     double phi_a = 0, phi_b = 0, phi_ab = 0;
 
     #pragma omp parallel for reduction(+:phi_a, phi_b, phi_ab)

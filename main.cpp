@@ -1,12 +1,22 @@
 #include "boost/random/cauchy_distribution.hpp"
 #include "boost/random/normal_distribution.hpp"
 #include <boost/random.hpp>
+#include <boost/math/distributions.hpp>
 #include <iostream>
 #include "first.h"
 #include <random>
 #include <chrono>
 #include "omp.h"
 
+
+
+/*
+TODO:
+Add UMU, KfM, KS, AD tests (parallel!!!)
+and add iterating over tests in examples
+in cauchy find h1 and h2 such as AP don't match in tables 3,4
+rewrite all with refs
+*/
 
 double g(double x){
     return log(1 + x*x);
@@ -17,87 +27,32 @@ double d2_g(double x){
 }
 
 
-
-// normal with h2=0
-void ex1(){
-    std::vector<double>  h1_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    double h2 = 0.0;
-    double alpha = 0.05;
-
-    std::vector<int> sample_sizes{100, 400};
-    int N = 500;
-    int M = 500;
-
-    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
-    
-    std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
-
-    std::cout<< "NORMAL:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_test);
-    std::cout << "================================\n";
-    std::cout << "================================\n\n";
-}
-
-//normal with h1=0
-void ex2(){
-    std::vector<double>  h2_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    double h1 = 0.0;
-    double alpha = 0.05;
-
-    std::vector<int> sample_sizes{100, 400};
-    int N = 500;
-    int M = 500;
-
-    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
-    
-    std::vector<double> integrals_n = read_integrals(DistributionType::NORMAL);
-
-    std::cout<< "NORMAL:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_test);
-    std::cout << "================================\n";
-    std::cout << "================================\n\n";
-}
-
-
 // cauchy with h2=0
 void ex3(){
     std::vector<double>  h1_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     double h2 = 0.0;
     double alpha = 0.05;
 
-    std::vector<int> sample_sizes{100, 400};
-    int N = 500;
-    int M = 500;
-
-    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
+    std::vector<int> sample_sizes{100, 400, 900, 1600};
+    int N = 5000;
+    int M = 5000;
     
+    boost::math::cauchy_distribution<double> dist(0, 1);
+    std::function<double(double)> F1 = [dist](double x){return boost::math::cdf(dist, x);};
+
     std::vector<double> integrals_n = read_integrals(DistributionType::CAUCHY);
 
-    std::cout<< "NORMAL:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_test);
+    // std::cout<< "ET_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_etest, F1);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "WMW_CAUCHY:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_wmw, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
 
-// cauchy with h1=0
-void ex4(){
-    std::vector<double>  h2_vals{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    double h1 = 0.0;
-    double alpha = 0.05;
-
-    std::vector<int> sample_sizes{100, 400};
-    int N = 500;
-    int M = 500;
-
-    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test = compute_etest;
-    
-    std::vector<double> integrals_n = read_integrals(DistributionType::CAUCHY);
-
-    std::cout<< "NORMAL:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_test);
-    std::cout << "================================\n";
-    std::cout << "================================\n\n";
-}
 
 
 void testing(){
@@ -155,8 +110,8 @@ void testing(){
 
 
 int main() {
-    ex1();
-    ex2();
+    // ex1();
+    // ex2();
     ex3();
-    ex4();
+    // ex4();
 }
