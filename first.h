@@ -46,6 +46,8 @@ double compute_etest(std::function<double(double)> g, double *X, double *Y, int 
 
 double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
 
+double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
+
 //
 double compute_asymptotic_power(double alpha, double b, double a);
 

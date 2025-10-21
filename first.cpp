@@ -5,7 +5,7 @@
 #include <iostream>
 #include "omp.h"
 #include "first.h"
-
+#include <algorithm>
 
 boost::random::normal_distribution<double> get_normal(int n, double h1, double h2){
     return boost::random::normal_distribution<double>(-h1 / (h2 + sqrt(n)), 1 / (1 + h2/sqrt(n) ) );
@@ -58,6 +58,26 @@ std::vector<double> read_integrals(DistributionType d_type){
     }
 }
 
+
+double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+    std::vector<double> Z;
+    Z.push_back(0);
+    for(int i=0; i<sample_size; ++i){
+        Z.push_back(X[i]);
+        Z.push_back(Y[i]);
+    }
+    std::sort(Z.begin()+1, Z.end());
+    int N = 2 * sample_size;
+
+    double res = 0;
+
+    # pragma omp parallel for reduction(+: res)
+    for(int k=1; k<=N; ++k){
+        res += (2 * k - 1) * ( log(F1(Z[k])) + log(1 - F1(Z[N - k + 1])) );
+    }
+
+    return -N - res / N;
+}
 
 
 

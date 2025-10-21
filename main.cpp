@@ -43,12 +43,17 @@ void ex3(){
     std::vector<double> integrals = read_integrals(DistributionType::CAUCHY);
 
     // std::cout<< "ET_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_etest, F1);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_etest, F1, true);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "WMW_CAUCHY:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, F1, false);
+    // std::cout<< "WMW_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "AD_CAUCHY:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -69,12 +74,17 @@ void ex4(){
     std::vector<double> integrals = read_integrals(DistributionType::CAUCHY);
 
     // std::cout<< "ET_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_etest, F1);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals_n, compute_etest, F1, true);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "WMW_CAUCHY:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, F1, false);
+    // std::cout<< "WMW_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "AD_CAUCHY:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -95,12 +105,17 @@ void ex1(){
     std::vector<double> integrals = read_integrals(DistributionType::NORMAL);
 
     // std::cout<< "ET_NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_etest, F1);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_etest, F1, true);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "WMW_NORMAL:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, F1, false);
+    // std::cout<< "WMW_NORMAL:\n";
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "AD_NORMAL:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -124,12 +139,17 @@ void ex2(){
     std::vector<double> integrals = read_integrals(DistributionType::NORMAL);
 
     // std::cout<< "ET_NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_etest, F1);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals_n, compute_etest, F1, true);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "WMW_NORMAL:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, F1, false);
+    // std::cout<< "WMW_NORMAL:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "AD_NORMAL:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
