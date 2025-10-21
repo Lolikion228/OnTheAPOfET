@@ -80,7 +80,6 @@ double compute_ad(std::function<double(double)> g, double *X, double *Y, int sam
 }
 
 
-
 double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
     double res = 0;
 
@@ -114,6 +113,33 @@ double compute_etest(std::function<double(double)> g, double *X, double *Y, int 
     return (phi_ab - phi_a - phi_b) / (sample_size * sample_size);
 }
 
+double compute_ks(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+    std::vector<double> ordered_X;
+    std::vector<double> ordered_Y;
+    std::vector<double> ordered_Z;
+
+
+    for(int i=0; i<sample_size; ++i){
+        ordered_X.push_back(X[i]);
+        ordered_Y.push_back(Y[i]);
+        ordered_Z.push_back(X[i]);
+        ordered_Z.push_back(Y[i]);
+    }
+
+    std::sort(ordered_X.begin(), ordered_X.end());
+    std::sort(ordered_Y.begin(), ordered_Y.end());
+    std::sort(ordered_Z.begin(), ordered_Z.end());
+
+    double res = 0;
+
+    #pragma omp parallel for reduction(max:res)
+    for(int i=0; i < sample_size * 2; ++i){
+        res = fmax(res, fabs(compute_edf(ordered_X, ordered_Z[i]) - compute_edf(ordered_Y, ordered_Z[i])));
+    }
+
+    return res;
+}
+
 
 double compute_asymptotic_power(double alpha, double b, double a){
     boost::math::normal_distribution<> dist(0, 1);
@@ -131,3 +157,12 @@ void print_sample(double *sample, int sample_size){
 
 
 
+double compute_edf(std::vector<double>& ordered_sample, double t){
+    double res = 0;
+
+    for(int i=0; (i<ordered_sample.size()) && (ordered_sample[i] < t); ++i){
+        res += 1;
+    }
+
+    return res / ordered_sample.size();
+}

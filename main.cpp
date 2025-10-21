@@ -12,10 +12,9 @@
 
 /*
 TODO:
-Add UMU, KfM, KS, AD tests (parallel!!!)
+Add UMU, CM, KS, AD tests (parallel!!!)
 and add iterating over tests in examples
 in cauchy find h1 and h2 such as AP don't match in tables 3,4
-rewrite all with refs
 */
 
 double g(double x){
@@ -52,10 +51,17 @@ void ex3(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "AD_CAUCHY:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
+    // std::cout<< "AD_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "KS_CAUCHY:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
+
+
 }
 
 // cauchy with h1=0
@@ -83,8 +89,13 @@ void ex4(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "AD_CAUCHY:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
+    // std::cout<< "AD_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "KS_CAUCHY:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -114,8 +125,13 @@ void ex1(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "AD_NORMAL:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
+    // std::cout<< "AD_NORMAL:\n";
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "KS_NORMAL:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -148,8 +164,13 @@ void ex2(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "AD_NORMAL:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
+    // std::cout<< "AD_NORMAL:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "KS_NORMAL:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }

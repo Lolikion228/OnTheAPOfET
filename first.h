@@ -40,6 +40,7 @@ void print_vector(std::vector<double> V);
 //
 void print_sample(double *sample, int sample_size);
 
+double compute_edf(std::vector<double>& ordered_sample, double t);
 
 //
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
@@ -48,6 +49,7 @@ double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sa
 
 double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
 
+double compute_ks(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
 //
 double compute_asymptotic_power(double alpha, double b, double a);
 
