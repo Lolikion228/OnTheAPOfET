@@ -1,12 +1,15 @@
 import re
 import pandas as pd
 
+
+kind = "h2"
+
 def parse_file(filename):
     with open(filename, 'r', encoding='utf-8') as file:
         content = file.read()
     
     # Разделяем содержимое по h2
-    sections = content.split('h2 = ')
+    sections = content.split(f"{kind} = ")
     
     results = {}
     n_values = {}
@@ -56,7 +59,7 @@ def create_transposed_dataframe_with_n(results, n_values):
     # Проверяем, что количество n совпадает с количеством emp_powers
     for h2 in h2_values:
         if len(n_values[h2]) != num_emp_powers:
-            print(f"Предупреждение: для h2={h2} количество n ({len(n_values[h2])}) не совпадает с количеством emp_powers ({num_emp_powers})")
+            print(f"Предупреждение: для {kind}={h2} количество n ({len(n_values[h2])}) не совпадает с количеством emp_powers ({num_emp_powers})")
     
     # Создаем имена строк с n
     index_names = []
@@ -81,7 +84,7 @@ def create_transposed_dataframe_with_n(results, n_values):
     data.append(asp_power_row)
     
     # Создаем DataFrame
-    df = pd.DataFrame(data, index=index_names, columns=[f'h2 = {h2}' for h2 in h2_values])
+    df = pd.DataFrame(data, index=index_names, columns=[f'{kind} = {h2}' for h2 in h2_values])
     
     return df
 
