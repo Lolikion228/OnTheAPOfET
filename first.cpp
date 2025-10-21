@@ -141,6 +141,34 @@ double compute_ks(std::function<double(double)> g, double *X, double *Y, int sam
 }
 
 
+double compute_cm(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+    std::vector<double> ordered_X;
+    std::vector<double> ordered_Y;
+    std::vector<double> ordered_Z;
+
+
+    for(int i=0; i<sample_size; ++i){
+        ordered_X.push_back(X[i]);
+        ordered_Y.push_back(Y[i]);
+        ordered_Z.push_back(X[i]);
+        ordered_Z.push_back(Y[i]);
+    }
+
+    std::sort(ordered_X.begin(), ordered_X.end());
+    std::sort(ordered_Y.begin(), ordered_Y.end());
+    std::sort(ordered_Z.begin(), ordered_Z.end());
+
+    double res = 0;
+
+    #pragma omp parallel for reduction(+:res)
+    for(int i=0; i < sample_size * 2; ++i){
+        double tmp = compute_edf(ordered_X, ordered_Z[i]) - compute_edf(ordered_Y, ordered_Z[i]);
+        res += tmp * tmp;
+    }
+
+    return res / 4;
+}
+
 double compute_asymptotic_power(double alpha, double b, double a){
     boost::math::normal_distribution<> dist(0, 1);
     double z = boost::math::quantile(dist, 1 - alpha / 2);

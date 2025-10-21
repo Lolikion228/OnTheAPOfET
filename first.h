@@ -42,6 +42,8 @@ void print_sample(double *sample, int sample_size);
 
 double compute_edf(std::vector<double>& ordered_sample, double t);
 
+double compute_cm(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
+
 //
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1);
 

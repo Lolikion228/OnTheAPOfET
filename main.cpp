@@ -32,7 +32,7 @@ void ex3(){
     double h2 = 0.0;
     double alpha = 0.05;
 
-    std::vector<int> sample_sizes{100, 400, 900, 1600};
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2000, 3000};
     int N = 5000;
     int M = 5000;
     
@@ -56,8 +56,13 @@ void ex3(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "KS_CAUCHY:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
+    // std::cout<< "KS_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "CM_CAUCHY:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_cm, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
@@ -70,7 +75,7 @@ void ex4(){
     double h1 = 0.0;
     double alpha = 0.05;
 
-    std::vector<int> sample_sizes{100, 400, 900, 1600};
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2000, 3000};
     int N = 5000;
     int M = 5000;
     
@@ -94,8 +99,13 @@ void ex4(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "KS_CAUCHY:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
+    // std::cout<< "KS_CAUCHY:\n";
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "CM_CAUCHY:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_cm, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -106,7 +116,7 @@ void ex1(){
     double h1 = 0.0;
     double alpha = 0.05;
 
-    std::vector<int> sample_sizes{100, 400, 900, 1600};
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2000, 3000};
     int N = 5000;
     int M = 5000;
     
@@ -130,8 +140,13 @@ void ex1(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "KS_NORMAL:\n";
-    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
+    // std::cout<< "KS_NORMAL:\n";
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "CM_NORMAL:\n";
+    run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_cm, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
@@ -145,7 +160,7 @@ void ex2(){
     double h2 = 0.0;
     double alpha = 0.05;
 
-    std::vector<int> sample_sizes{100, 400, 900, 1600};
+    std::vector<int> sample_sizes{100, 400, 900, 1600, 2000, 3000};
     int N = 5000;
     int M = 5000;
     
@@ -169,8 +184,13 @@ void ex2(){
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
-    std::cout<< "KS_NORMAL:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
+    // std::cout<< "KS_NORMAL:\n";
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
+
+    std::cout<< "CM_NORMAL:\n";
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_cm, F1, false);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 }
