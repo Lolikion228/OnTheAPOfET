@@ -19,7 +19,7 @@ get_table_caption <- function(filename) {
         varying <- "h1"
     }
     
-    return(paste(test_full, "Test for", dist_full, "Distribution (fixed", fixed_param, ")"))
+    return(paste(test_full, "Test for", dist_full, "Distribution ( fixed", fixed_param, ")"))
 }
 
 for( fname in list.files(path = "./notes/res4/csvs", full.names = F)){
