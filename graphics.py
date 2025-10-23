@@ -101,7 +101,7 @@ def plot_by_rows(dfs: Dict, dist_name: str, fixed_type: str, varying_param: str,
                     plt.plot(x_sorted, y_sorted, 
                             marker='o', 
                             linewidth=2,
-                            label=f'{test_name} ({fixed_type}={fixed_value})')
+                            label=f'{test_name}')
         
         plt.xlabel(f'{varying_param} values', fontsize=12)
         plt.ylabel('Empirical Power', fontsize=12)
@@ -158,7 +158,7 @@ def plot_by_columns(dfs: Dict, dist_name: str, fixed_type: str, varying_param: s
                     plt.plot(n_sorted, powers_sorted, 
                             marker='s', 
                             linewidth=2,
-                            label=f'{test_name} ({fixed_type}={fixed_value})')
+                            label=f'{test_name}')
         
         plt.xlabel('Sample Size (n)', fontsize=12)
         plt.ylabel('Empirical Power', fontsize=12)
