@@ -66,17 +66,29 @@ double compute_ad(std::function<double(double)> g, double *X, double *Y, int sam
         Z.push_back(X[i]);
         Z.push_back(Y[i]);
     }
-    std::sort(Z.begin()+1, Z.end());
+    std::sort(Z.begin() + 1, Z.end());
     int N = 2 * sample_size;
+
+    int M[2][N];
+    for(int i=1; i<N; ++i){
+        M[0][i] = 0;
+        M[1][i] = 0;
+        for(int j=0; j<sample_size; ++j){
+            M[0][i] += (X[j] <= Z[i]);
+            M[1][i] += (Y[j] <= Z[i]);
+        }
+    }
 
     double res = 0;
 
     # pragma omp parallel for reduction(+: res)
-    for(int k=1; k<=N; ++k){
-        res += (2 * k - 1) * ( log(F1(Z[k])) + log(1 - F1(Z[N - k + 1])) );
+    for(int i=1; i<N; ++i){
+        double d1 = (N * M[0][i] - sample_size * i);
+        double d2 = (N * M[1][i] - sample_size * i);
+        res += (d1 * d1 + d2 * d2) / (i * (N - i));    
     }
 
-    return -N - res / N;
+    return res / (N * sample_size);
 }
 
 
@@ -189,7 +201,7 @@ double compute_edf(std::vector<double>& ordered_sample, double t){
     double res = 0;
 
     for(int i=0; (i<ordered_sample.size()) && (ordered_sample[i] < t); ++i){
-        res += 1;
+        ++res;
     }
 
     return res / ordered_sample.size();
