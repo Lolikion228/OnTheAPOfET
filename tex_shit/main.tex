@@ -23,8 +23,26 @@ bottom=2cm   % отступ снизу
 ]{geometry}
 
 
+\title{Очень крутое название}
+\author{Сивков Вячеслав}
+\date{2025}
+
 \begin{document}
 
+\maketitle
+
+\tableofcontents
+
+\section{Введение}
+текст введения... \cite{melas2024}
+
+
+\section{Что-то про все тесты}
+
+\section{Описание эксперимента}
+
+\newpage
+\section{Результаты}
 Всюду далее $g(x) = \ln(1+x^2)$.
 
 \begin{example}
@@ -345,72 +363,84 @@ bottom=2cm   % отступ снизу
 
 
 \vspace{0.1in}
-Далее, на рис. 1 - рис. 4 представлены зависимости эмпирических мощностей от различий по масштабу/сдвигу, и на рис. 5 - рис. 8 представлены зависимости эмпирических мощностей от размера выборки.
+Далее, на рис. 1 - рис. 4 представлены зависимости эмпирических мощностей от различий по масштабу/сдвигу, и на рис. 5 - рис. 8 представлены зависимости эмпирических мощностей от размера выборки.\\
 
-\begin{figure}[ht]
+
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics/NORMAL_h1_n_EP (n_500).png}
 	\caption{Зависимость эмпирических мощностей от различия по масштабу, в случае стандартных нормальных распределений с одинаковым сдвигом.}
-	\label{fig:my_image}
+	\label{fig:normal_pow_vs_h2}
 \end{figure}
 
-\begin{figure}[ht]
+
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics/NORMAL_h2_n_EP (n_500).png}
 	\caption{Зависимость эмпирических мощностей от различия по сдвигу, в случае стандартных нормальных распределений с одинаковым масштабом.}
-	\label{fig:my_image}
+	\label{fig:normal_pow_vs_h1}
 \end{figure}
 
-\newpage
 
-\begin{figure}[ht]
+
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics/CAUCHY_h1_n_EP (n_500).png}
 	\caption{Зависимость эмпирических мощностей от различия по масштабу, в случае стандартных распределений Коши с одинаковым сдвигом.}
-	\label{fig:my_image}
+	\label{fig:cauchy_pow_vs_h2}
 \end{figure}
 
 
 
-\begin{figure}[ht]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics/CAUCHY_h2_n_EP (n_500).png}
 	\caption{Зависимость эмпирических мощностей от различия по сдвигу, в случае стандартных распределений Коши с одинаковым масштабом.}
-	\label{fig:my_image}
+	\label{fig:cauchy_pow_vs_h1}
 \end{figure}
 
 
-\newpage
 
-\begin{figure}[ht]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics2/NORMAL_h1_h2_2.5.png}
 	\caption{Зависимость эмпирических мощностей от размера выборки в случае стандартных нормальных распределений, отличающихся масштабом.}
-	\label{fig:my_image}
+	\label{fig:normal_pow_vs_n_h2_diff}
 \end{figure}
 
-\begin{figure}[ht]
+
+
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics2/NORMAL_h2_h1_5.0.png}
 	\caption{Зависимость эмпирических мощностей от размера выборки в случае стандартных нормальных распределений, отличающихся сдвигом.}
-	\label{fig:my_image}
+	\label{fig:normal_pow_vs_n_h1_diff}
 \end{figure}
 
-\newpage 
-
-\begin{figure}[ht]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics2/CAUCHY_h1_h2_7.0.png}
 	\caption{Зависимость эмпирических мощностей от размера выборки в случае стандартных распределений Коши, отличающихся масштабом.}
-	\label{fig:my_image}
+	\label{fig:cauchy_pow_vs_n_h2_diff}
 \end{figure}
 
 
-\begin{figure}[ht]
+
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{pics2/CAUCHY_h2_h1_6.0.png}
 	\caption{Зависимость эмпирических мощностей от размера выборки в случае стандартных распределений Коши, отличающихся сдвигом.}
-	\label{fig:my_image}
+	\label{fig:cauchy_pow_vs_n_h1_diff}
 \end{figure}
+
+
+
+\clearpage
+\section{Анализ результатов}
+text
+
+\bibliographystyle{ugost2008}
+\bibliography{refs}
+
 
 \end{document}
