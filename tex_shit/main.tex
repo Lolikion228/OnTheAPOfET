@@ -38,7 +38,54 @@ bottom=2cm   % отступ снизу
 
 
 \section{Методы проверки гипотез}
-В исследовании были использованы...
+\subsection{ET}
+
+\begin{equation}
+\begin{aligned}
+	\Phi_{nm} = \Phi_{AB} - \Phi_{A} -\Phi_{B}, \quad
+	\Phi_{A} = \frac{1}{n^2} \sum_{1 \leq i \leq j \leq n} g(X_i - X_j),\\
+	\Phi_{B} = \frac{1}{m^2} \sum_{1 \leq i \leq j \leq n} g(Y_i - Y_j), \quad
+	\Phi_{AB} = \frac{1}{nm} \sum_{i=1}^n \sum_{j=1}^m g(X_i - Y_j)
+\end{aligned}
+\end{equation}
+
+\subsection{AD}
+\begin{equation}
+	A_{kN}^2 = \frac{1}{N} \sum_{i=1}^k \frac{1}{n_i} \sum_{j=1}^{N-1} \frac{(NM_{ij}-jn_i)^2}{j(N-j)}
+\end{equation}
+
+\subsection{KS}
+
+\begin{equation}
+	KS = \max_{1\leq i \leq N} | \hat{F}_m(Z_{(i)}) - \hat{G}_n(Z_{(i)})  |
+\end{equation}
+
+
+\subsection{CM}
+
+\begin{equation}
+	CM = \frac{mn}{N^2} \sum_{i=1}^{N} (\hat{F}_m(Z_{(i)}) - \hat{G}_n(Z_{(i)}))^2
+\end{equation}
+
+
+\subsection{WMW}
+
+\begin{equation}
+	U_{nm} = \sum_{i=1}^n \sum_{j=1}^m \chi(x_i,y_j)
+\end{equation}
+
+with
+
+\begin{equation}
+	\chi(x_i,y_j) = 
+	\begin{cases}
+		1, \ x_i \geq y_j \\
+		0, \ x_i < y_j
+	\end{cases}
+\end{equation}
+
+
+
 
 \section{Описание эксперимента}
 всё просто, нужно всего лишь...
