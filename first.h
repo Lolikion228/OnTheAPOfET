@@ -228,7 +228,6 @@ boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h
 
 template <typename T>
 void run_experiment(std::function<double(double)> g,
-                    std::function<double(double)> d2_g,
                     double h1, std::vector<double> h2_vals,
                     double alpha, int N, int M,
                     std::vector<int> sample_sizes,
@@ -274,7 +273,6 @@ void run_experiment(std::function<double(double)> g,
 
 template <typename T>
 void run_experiment(std::function<double(double)> g,
-                    std::function<double(double)> d2_g,
                     std::vector<double> h1_vals, double h2, 
                     double alpha, int N, int M,
                     std::vector<int> sample_sizes,

@@ -107,6 +107,7 @@ double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sa
 
 
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
+    
     double phi_a = 0, phi_b = 0, phi_ab = 0;
 
     #pragma omp parallel for reduction(+:phi_a, phi_b, phi_ab)
