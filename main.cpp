@@ -39,38 +39,36 @@ void ex3(){
     int N = 5000;
     int M = 5000;
     
-    boost::math::cauchy_distribution<double> dist(0, 1);
-    std::function<double(double)> F1 = [dist](double x){return boost::math::cdf(dist, x);};
 
     std::vector<double> integrals = read_integrals(DistributionType::CAUCHY);
 
     std::cout<< "ET_CAUCHY:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest, F1, true);
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest, true);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
     // std::cout<< "HT_CAUCHY:\n";
-    // run_experiment(g2, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest, F1, false);
+    // run_experiment(g2, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "WMW_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "AD_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "KS_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "CM_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_cm, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_cm,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
@@ -88,38 +86,36 @@ void ex4(){
     int N = 5000;
     int M = 5000;
     
-    boost::math::cauchy_distribution<double> dist(0, 1);
-    std::function<double(double)> F1 = [dist](double x){return boost::math::cdf(dist, x);};
 
     std::vector<double> integrals = read_integrals(DistributionType::CAUCHY);
 
     // std::cout<< "ET_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest, F1, true);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest, true);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "HT_CAUCHY:\n";
-    // run_experiment(g2, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest, F1, false);
+    // run_experiment(g2, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_etest,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "WMW_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_wmw,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "AD_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ad,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "KS_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_ks, false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "CM_CAUCHY:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_cm, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_cauchy, integrals, compute_cm,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 }
@@ -135,38 +131,37 @@ void ex1(){
     int N = 5000;
     int M = 5000;
     
-    boost::math::normal_distribution<double> dist(0, 1);
-    std::function<double(double)> F1 = [dist](double x){return boost::math::cdf(dist, x);};
+
 
     std::vector<double> integrals = read_integrals(DistributionType::NORMAL);
 
     // std::cout<< "ET_NORMAL:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest, F1, true);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest, true);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     std::cout<< "HT_NORMAL:\n";
-    run_experiment(g2, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest, F1, true);
+    run_experiment(g2, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest,  true);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
     // std::cout<< "WMW_NORMAL:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "AD_NORMAL:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "KS_NORMAL:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "CM_NORMAL:\n";
-    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_cm, F1, false);
+    // run_experiment(g, d2_g, h1, h2_vals, alpha, N, M, sample_sizes, get_normal, integrals, compute_cm,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 }
@@ -185,40 +180,38 @@ void ex2(){
     int N = 5000;
     int M = 5000;
     
-    boost::math::normal_distribution<double> dist(0, 1);
-    std::function<double(double)> F1 = [dist](double x){return boost::math::cdf(dist, x);};
 
     std::vector<double> integrals = read_integrals(DistributionType::NORMAL);
 
     std::cout<< "ET_NORMAL:\n";
-    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest, F1, true);
+    run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest,  true);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
-    std::cout<< "HT_NORMAL:\n";
-    run_experiment(g2, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest, F1, true);
-    std::cout << "================================\n";
-    std::cout << "================================\n\n";
+    // std::cout<< "HT_NORMAL:\n";
+    // run_experiment(g2, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_etest,  true);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
 
 
 
     // std::cout<< "WMW_NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_wmw, false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "AD_NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ad, false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "KS_NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_ks,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 
     // std::cout<< "CM_NORMAL:\n";
-    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_cm, F1, false);
+    // run_experiment(g, d2_g, h1_vals, h2, alpha, N, M, sample_sizes, get_normal, integrals, compute_cm,  false);
     // std::cout << "================================\n";
     // std::cout << "================================\n\n";
 }

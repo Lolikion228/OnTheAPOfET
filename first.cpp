@@ -46,7 +46,7 @@ std::vector<double> read_integrals(DistributionType d_type){
     switch (d_type)
     {
     case DistributionType::NORMAL:
-        return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal2.txt");
+        return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal.txt");
         break;
     case DistributionType::CAUCHY:
         return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/cauchy.txt");
@@ -59,7 +59,7 @@ std::vector<double> read_integrals(DistributionType d_type){
 }
 
 
-double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size){
     std::vector<double> Z;
     Z.push_back(0);
     for(int i=0; i<sample_size; ++i){
@@ -92,7 +92,7 @@ double compute_ad(std::function<double(double)> g, double *X, double *Y, int sam
 }
 
 
-double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size){
     double res = 0;
 
     #pragma omp parallel for reduction(+:res)
@@ -106,7 +106,7 @@ double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sa
 }
 
 
-double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
     double phi_a = 0, phi_b = 0, phi_ab = 0;
 
     #pragma omp parallel for reduction(+:phi_a, phi_b, phi_ab)
@@ -125,7 +125,7 @@ double compute_etest(std::function<double(double)> g, double *X, double *Y, int 
     return (phi_ab - phi_a - phi_b) / (sample_size * sample_size);
 }
 
-double compute_ks(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+double compute_ks(std::function<double(double)> g, double *X, double *Y, int sample_size){
     std::vector<double> ordered_X;
     std::vector<double> ordered_Y;
     std::vector<double> ordered_Z;
@@ -153,7 +153,7 @@ double compute_ks(std::function<double(double)> g, double *X, double *Y, int sam
 }
 
 
-double compute_cm(std::function<double(double)> g, double *X, double *Y, int sample_size, std::function<double(double)> F1){
+double compute_cm(std::function<double(double)> g, double *X, double *Y, int sample_size){
     std::vector<double> ordered_X;
     std::vector<double> ordered_Y;
     std::vector<double> ordered_Z;
