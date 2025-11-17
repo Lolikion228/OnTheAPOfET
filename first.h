@@ -177,8 +177,8 @@ std::vector<double> read_integrals(DistributionType d_type);
 
 
 template <typename T>
-std::pair<std::vector<double>, double> experiment_step(std::function<double(double)> g,
-                     std::function<double(double)> d2_g,
+std::pair<std::vector<double>, double> experiment_step(
+                    std::function<double(double)> g,
                     double h1, double h2, double alpha,
                     int N, int M, std::vector<int> sample_sizes,
                     std::vector<double> integrals,
@@ -257,7 +257,7 @@ void run_experiment(std::function<double(double)> g,
         {
         Timer t1;
         std::cout << "h2 = " << h2 << "\n";
-        auto [e_pow, a_pow] = experiment_step(g, d2_g, h1, h2,
+        auto [e_pow, a_pow] = experiment_step(g, h1, h2,
             alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, compute_test, F1);
         std::cout << "emp_powers = ";
         print_vector(e_pow);
@@ -268,6 +268,9 @@ void run_experiment(std::function<double(double)> g,
         std::cout << "\n\n";  
     }
 }
+
+
+
 
 template <typename T>
 void run_experiment(std::function<double(double)> g,
@@ -301,7 +304,7 @@ void run_experiment(std::function<double(double)> g,
         {
         Timer t1;
         std::cout << "h1 = " << h1 << "\n";
-        auto [e_pow, a_pow] = experiment_step(g, d2_g, h1, h2,
+        auto [e_pow, a_pow] = experiment_step(g, h1, h2,
             alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, compute_test, F1);
         std::cout << "emp_powers = ";
         print_vector(e_pow);
