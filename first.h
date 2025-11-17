@@ -43,23 +43,23 @@ void print_sample(double *sample, int sample_size);
 double compute_edf(std::vector<double>& ordered_sample, double t);
 
 
-double compute_cm(std::function<double(double)> g, double *X, double *Y, int sample_size);
+double compute_cm(double *X, double *Y, int sample_size);
 
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size);
 
-double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size);
+double compute_wmw(double *X, double *Y, int sample_size);
 
-double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size);
+double compute_ad(double *X, double *Y, int sample_size);
 
-double compute_ks(std::function<double(double)> g, double *X, double *Y, int sample_size);
+double compute_ks(double *X, double *Y, int sample_size);
 //
 
 double compute_asymptotic_power(double alpha, double b, double a);
 
 //
 template <typename T>
-double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::function<double(double)> g,
-                                std::function<double(std::function<double(double)>, double*, double*, int)> compute_test)
+double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
+                               std::function<double(double*, double*, int)> compute_test)
 {
     double cnt_reject = 0;
 
@@ -74,7 +74,7 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2, std::f
         for(int i=0; i<N; ++i){
             sample(d1, n, X);
             sample(d2, n, Y);
-            cnt_reject += ( (n * compute_test(g, X, Y, n)) >= crit_val );
+            cnt_reject += ( (n * compute_test(X, Y, n)) >= crit_val );
             
         }
         delete[] X;
@@ -131,8 +131,8 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
 
 //
 template <typename T>
-double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(double)> g,
-                        std::function<double(std::function<double(double)>, double*, double*, int)> compute_test)
+double compute_crit_val(int n, int M, double alpha, T d1,
+                        std::function<double(double*, double*, int)> compute_test)
 {
     
     double *Z_ = new double[2*n];
@@ -154,7 +154,7 @@ double compute_crit_val(int n, int M, double alpha, T d1, std::function<double(d
         #pragma omp for
         for(int i=0; i<M; ++i){
             random_split_direct(Z, n, X, Y);
-            double test_val = compute_test(g, X, Y, n);
+            double test_val = compute_test(X, Y, n);
             test_vals[i] = n * test_val;
         }
 
@@ -179,13 +179,12 @@ std::vector<double> read_integrals(DistributionType d_type);
 
 template <typename T>
 std::pair<std::vector<double>, double> experiment_step(
-                    std::function<double(double)> g,
                     double h1, double h2, double alpha,
                     int N, int M, std::vector<int> sample_sizes,
                     std::vector<double> integrals,
                     std::vector<double> crit_vals,
                     T dist_template,
-                    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test)
+                    std::function<double(double*, double*, int)> compute_test)
 {
 
     auto d1 = dist_template(1,0,0);
@@ -209,7 +208,7 @@ std::pair<std::vector<double>, double> experiment_step(
         int n = sample_sizes[i];
         std::cout << "n = " << n << "  ||  ";
         auto d2_n = dist_template(n, h1, h2);
-        double e_pow = compute_empirical_power(n, N, crit_vals[i], d1, d2_n, g, compute_test);
+        double e_pow = compute_empirical_power(n, N, crit_vals[i], d1, d2_n, compute_test);
         emp_powers.push_back(e_pow);
     }
 
@@ -227,12 +226,11 @@ boost::random::normal_distribution<double> get_normal(int n, double h1, double h
 boost::random::cauchy_distribution<double> get_cauchy(int n, double h1, double h2);
 
 template <typename T>
-void run_experiment(std::function<double(double)> g,
-                    double h1, std::vector<double> h2_vals,
+void run_experiment(double h1, std::vector<double> h2_vals,
                     double alpha, int N, int M,
                     std::vector<int> sample_sizes,
                     T dist_template, std::vector<double> integrals,
-                    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test,
+                    std::function<double(double*, double*, int)> compute_test,
                     bool compute_AP)
 {   
 
@@ -247,7 +245,7 @@ void run_experiment(std::function<double(double)> g,
     for(int n : sample_sizes){
         Timer t1;
         std::cout << "n = " << n << "  ||  ";
-        double cv = compute_crit_val(n, M, alpha, d1, g, compute_test);
+        double cv = compute_crit_val(n, M, alpha, d1, compute_test);
         crit_vals.push_back(cv);
     }
     std::cout << "\n";
@@ -256,7 +254,7 @@ void run_experiment(std::function<double(double)> g,
         {
         Timer t1;
         std::cout << "h2 = " << h2 << "\n";
-        auto [e_pow, a_pow] = experiment_step(g, h1, h2,
+        auto [e_pow, a_pow] = experiment_step(h1, h2,
             alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, compute_test);
         std::cout << "emp_powers = ";
         print_vector(e_pow);
@@ -272,12 +270,11 @@ void run_experiment(std::function<double(double)> g,
 
 
 template <typename T>
-void run_experiment(std::function<double(double)> g,
-                    std::vector<double> h1_vals, double h2, 
+void run_experiment(std::vector<double> h1_vals, double h2, 
                     double alpha, int N, int M,
                     std::vector<int> sample_sizes,
                     T dist_template, std::vector<double> integrals,
-                    std::function<double(std::function<double(double)>, double*, double*, int)> compute_test,
+                    std::function<double(double*, double*, int)> compute_test,
                     bool compute_AP)
 {   
 
@@ -292,7 +289,7 @@ void run_experiment(std::function<double(double)> g,
     for(int n : sample_sizes){
         Timer t1;
         std::cout << "n = " << n << "  ||  ";
-        double cv = compute_crit_val(n, M, alpha, d1, g, compute_test);
+        double cv = compute_crit_val(n, M, alpha, d1, compute_test);
         crit_vals.push_back(cv);
     }
     std::cout << "\n";
@@ -301,7 +298,7 @@ void run_experiment(std::function<double(double)> g,
         {
         Timer t1;
         std::cout << "h1 = " << h1 << "\n";
-        auto [e_pow, a_pow] = experiment_step(g, h1, h2,
+        auto [e_pow, a_pow] = experiment_step(h1, h2,
             alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, compute_test);
         std::cout << "emp_powers = ";
         print_vector(e_pow);

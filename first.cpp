@@ -59,7 +59,8 @@ std::vector<double> read_integrals(DistributionType d_type){
 }
 
 
-double compute_ad(std::function<double(double)> g, double *X, double *Y, int sample_size){
+
+double compute_ad(double *X, double *Y, int sample_size){
     std::vector<double> Z;
     Z.push_back(0);
     for(int i=0; i<sample_size; ++i){
@@ -91,8 +92,7 @@ double compute_ad(std::function<double(double)> g, double *X, double *Y, int sam
     return res / (N * sample_size);
 }
 
-
-double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sample_size){
+double compute_wmw(double *X, double *Y, int sample_size){
     double res = 0;
 
     #pragma omp parallel for reduction(+:res)
@@ -104,7 +104,6 @@ double compute_wmw(std::function<double(double)> g, double *X, double *Y, int sa
 
     return res;
 }
-
 
 double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
     
@@ -126,7 +125,7 @@ double compute_etest(std::function<double(double)> g, double *X, double *Y, int 
     return (phi_ab - phi_a - phi_b) / (sample_size * sample_size);
 }
 
-double compute_ks(std::function<double(double)> g, double *X, double *Y, int sample_size){
+double compute_ks(double *X, double *Y, int sample_size){
     std::vector<double> ordered_X;
     std::vector<double> ordered_Y;
     std::vector<double> ordered_Z;
@@ -153,8 +152,7 @@ double compute_ks(std::function<double(double)> g, double *X, double *Y, int sam
     return res;
 }
 
-
-double compute_cm(std::function<double(double)> g, double *X, double *Y, int sample_size){
+double compute_cm(double *X, double *Y, int sample_size){
     std::vector<double> ordered_X;
     std::vector<double> ordered_Y;
     std::vector<double> ordered_Z;
@@ -181,6 +179,9 @@ double compute_cm(std::function<double(double)> g, double *X, double *Y, int sam
 
     return res / 4;
 }
+
+
+
 
 double compute_asymptotic_power(double alpha, double b, double a){
     boost::math::normal_distribution<> dist(0, 1);
