@@ -90,11 +90,11 @@ void ex_tmp(std::vector<double> h1_vals, double h2, double alpha, int N, int M,
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
-    std::cout<< "HT_" << name << "\n";
-    run_experiment(h1_vals, h2, alpha, N, M, sample_sizes, get_dist, integrals,
-    [](double* X, double *Y, int n ){return compute_etest(g2, X, Y, n);},  false);
-    std::cout << "================================\n";
-    std::cout << "================================\n\n";
+    // std::cout<< "HT_" << name << "\n";
+    // run_experiment(h1_vals, h2, alpha, N, M, sample_sizes, get_dist, integrals,
+    // [](double* X, double *Y, int n ){return compute_etest(g2, X, Y, n);},  false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
 
     // std::cout<< "WMW_" << name << "\n";
     // run_experiment(h1_vals, h2, alpha, N, M, sample_sizes, get_dist, integrals, compute_wmw, false);
@@ -129,11 +129,11 @@ void ex_tmp(double h1, std::vector<double> h2_vals,  double alpha, int N, int M,
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
-    std::cout<< "HT_" << name << "\n";
-    run_experiment(h1, h2_vals, alpha, N, M, sample_sizes, get_dist, integrals,
-    [](double* X, double *Y, int n ){return compute_etest(g2, X, Y, n);},  false);
-    std::cout << "================================\n";
-    std::cout << "================================\n\n";
+    // std::cout<< "HT_" << name << "\n";
+    // run_experiment(h1, h2_vals, alpha, N, M, sample_sizes, get_dist, integrals,
+    // [](double* X, double *Y, int n ){return compute_etest(g2, X, Y, n);},  false);
+    // std::cout << "================================\n";
+    // std::cout << "================================\n\n";
 
     // std::cout<< "WMW_" << name << "\n";
     // run_experiment(h1, h2_vals, alpha, N, M, sample_sizes, get_dist, integrals, compute_wmw, false);
@@ -211,7 +211,7 @@ void ex4(){
 
 int main() {
     ex1();
-    // ex2();
-    // ex3();
-    // ex4();
+    ex2();
+    ex3();
+    ex4();
 }

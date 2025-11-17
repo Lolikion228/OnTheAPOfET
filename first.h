@@ -244,8 +244,8 @@ void run_experiment(double h1, std::vector<double> h2_vals,
     std::cout << "computing crit_vals...\n";
     for(int n : sample_sizes){
         Timer t1;
-        std::cout << "n = " << n << "  ||  ";
         double cv = compute_crit_val(n, M, alpha, d1, compute_test);
+        std::cout << "n = " << n << "  ||  cv = " <<  cv << " || ";
         crit_vals.push_back(cv);
     }
     std::cout << "\n";
@@ -288,8 +288,8 @@ void run_experiment(std::vector<double> h1_vals, double h2,
     std::cout << "computing crit_vals...\n";
     for(int n : sample_sizes){
         Timer t1;
-        std::cout << "n = " << n << "  ||  ";
         double cv = compute_crit_val(n, M, alpha, d1, compute_test);
+        std::cout << "n = " << n << "  ||  cv = " <<  cv << " || ";
         crit_vals.push_back(cv);
     }
     std::cout << "\n";
