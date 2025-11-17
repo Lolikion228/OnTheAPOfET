@@ -199,16 +199,24 @@ void ex3(){
 
 // cauchy with h1=0
 void ex4(){
-    std::vector<double>  h2_vals{3, 5};
+    std::vector<double>  h2_vals{3, 5, 7};
     double h1 = 0.0;
     double alpha = 0.05;
-    std::vector<int> sample_sizes{100, 200, 300};
+    std::vector<int> sample_sizes{100, 400};
     int N = 5000;
     int M = 5000;
     std::vector<double> integrals = read_integrals(DistributionType::CAUCHY);
     ex_tmp(h1, h2_vals, alpha, N, M, sample_sizes, integrals, get_cauchy, "CAUCHY");
 }
 
+
+
+/*
+1. пихнуть omp везде где дают
+2. убрать лишние копирования (передавать по ссылкам)
+3. сделать норм ф-ю перемешки
+4. всё протестить
+*/
 
 int main() {
     // ex1();

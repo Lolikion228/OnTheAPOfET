@@ -56,7 +56,7 @@ double compute_ks(double *X, double *Y, int sample_size);
 
 double compute_asymptotic_power(double alpha, double b, double a);
 
-//
+// сначала насемплить а потом считать в параллельном режиме?
 template <typename T>
 double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
                                std::function<double(double*, double*, int)> compute_test,
@@ -64,16 +64,18 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
 {
     double cnt_reject = 0;
 
-    double *X = new double[n];
-    double *Y = new double[n];
-    double etest_val;
-
+    double *X = new double[n * N];
+    double *Y = new double[n * N];
     for(int i=0; i<N; ++i){
-        sample(d1, n, X, gen);
-        sample(d2, n, Y, gen);
-        cnt_reject += ( (n * compute_test(X, Y, n)) >= crit_val );
-        
+        sample(d1, n, X + (i * n), gen);
+        sample(d2, n, Y + (i * n), gen);
     }
+
+    #pragma omp parallel for reduction(+:cnt_reject)
+    for(int i=0; i<N; ++i){
+        cnt_reject += ( (n * compute_test(X + (i * n), Y + (i * n), n)) >= crit_val );
+    }
+
     delete[] X;
     delete[] Y;
     
