@@ -105,7 +105,7 @@ double compute_wmw(double *X, double *Y, int sample_size){
     return res;
 }
 
-double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size){
+double compute_etest(double (*g)(double), double *X, double *Y, int sample_size){
     
     double phi_a = 0, phi_b = 0, phi_ab = 0;
 

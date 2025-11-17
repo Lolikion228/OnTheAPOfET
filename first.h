@@ -26,8 +26,6 @@ public:
 
 template <typename T>
 void sample(T dist, int sample_size, double *X, boost::random::mt19937& gen){
-    // std::random_device rd;
-    // boost::random::mt19937 gen(rd());
     for(int i=0; i<sample_size; ++i){
         X[i] = dist(gen);
     }
@@ -45,7 +43,7 @@ double compute_edf(std::vector<double>& ordered_sample, double t);
 
 double compute_cm(double *X, double *Y, int sample_size);
 
-double compute_etest(std::function<double(double)> g, double *X, double *Y, int sample_size);
+double compute_etest(double (*g)(double), double *X, double *Y, int sample_size);
 
 double compute_wmw(double *X, double *Y, int sample_size);
 
@@ -56,7 +54,7 @@ double compute_ks(double *X, double *Y, int sample_size);
 
 double compute_asymptotic_power(double alpha, double b, double a);
 
-// сначала насемплить а потом считать в параллельном режиме?
+
 template <typename T>
 double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
                                std::function<double(double*, double*, int)> compute_test,
@@ -66,6 +64,7 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
 
     double *X = new double[n * N];
     double *Y = new double[n * N];
+
     for(int i=0; i<N; ++i){
         sample(d1, n, X + (i * n), gen);
         sample(d2, n, Y + (i * n), gen);
@@ -79,7 +78,6 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
     delete[] X;
     delete[] Y;
     
-
     return cnt_reject / N;
 }
 
@@ -114,9 +112,7 @@ double quantile(const std::vector<T>& data, double probability) {
 
 //
 template<typename T>
-void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost::random::mt19937& gen) {
-    // std::random_device rd;
-    // boost::random::mt19937 gen(rd());
+void random_split_direct(std::vector<T>& Z, size_t n, double *X, double *Y, boost::random::mt19937& gen) {
     std::shuffle(Z.begin(), Z.end(), gen);
 
     for(int i=0; i<n; ++i){
@@ -143,13 +139,20 @@ double compute_crit_val(int n, int M, double alpha, T d1,
     
     std::vector<double> test_vals(M);
 
-    double *X = new double[n];
-    double *Y = new double[n];
-
+    double *X = new double[n * M];
+    double *Y = new double[n * M];
+    
     for(int i=0; i<M; ++i){
-        random_split_direct(Z, n, X, Y, gen);
-        double test_val = compute_test(X, Y, n);
-        test_vals[i] = n * test_val;
+        random_split_direct(Z, n, X + (i * n), Y + (i * n), gen);
+    }
+
+    #pragma omp parallel for
+    for(int i=0; i<M; ++i){
+        double test_val = compute_test(X + (i * n), Y + (i * n), n);
+        #pragma omp critical
+        {
+            test_vals[i] = n * test_val;
+        }
     }
 
     delete[] X;
