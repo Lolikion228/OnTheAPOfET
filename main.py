@@ -224,6 +224,16 @@ def main():
 # test()
 # main()
 
-f = templates["cauchy"](1, 0, 0).pdf
-integrals = compute_integrals(f, g, d2_g)
-print(integrals)
+# f = templates["cauchy"](1, 0, 0).pdf
+# integrals = compute_integrals(f, g, d2_g)
+# print(integrals)
+
+from scipy.stats import anderson
+import numpy as np
+
+# Пример использования
+data = [1, 2, 3, 4, 5, 5, 5, 5]
+result = anderson(data, dist='norm')
+print(f"Статистика: {result.statistic}")
+print(f"Критические значения: {result.critical_values}")
+print(f"Уровни значимости: {result.significance_level}")

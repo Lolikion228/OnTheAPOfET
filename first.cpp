@@ -46,7 +46,7 @@ std::vector<double> read_integrals(DistributionType d_type){
     switch (d_type)
     {
     case DistributionType::NORMAL:
-        return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal.txt");
+        return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/normal2.txt");
         break;
     case DistributionType::CAUCHY:
         return read_numbers_from_file("/home/lolikion/Документы/study/нир5сем/code/ex/precomputed_integrals/cauchy.txt");
