@@ -25,9 +25,9 @@ public:
 
 
 template <typename T>
-void sample(T dist, int sample_size, double *X){
-    std::random_device rd;
-    boost::random::mt19937 gen(rd());
+void sample(T dist, int sample_size, double *X, boost::random::mt19937& gen){
+    // std::random_device rd;
+    // boost::random::mt19937 gen(rd());
     for(int i=0; i<sample_size; ++i){
         X[i] = dist(gen);
     }
@@ -59,27 +59,24 @@ double compute_asymptotic_power(double alpha, double b, double a);
 //
 template <typename T>
 double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
-                               std::function<double(double*, double*, int)> compute_test)
+                               std::function<double(double*, double*, int)> compute_test,
+                               boost::random::mt19937& gen)
 {
     double cnt_reject = 0;
 
+    double *X = new double[n];
+    double *Y = new double[n];
+    double etest_val;
 
-    #pragma omp parallel reduction(+:cnt_reject)
-    {   
-        double *X = new double[n];
-        double *Y = new double[n];
-        double etest_val;
-
-        #pragma omp for 
-        for(int i=0; i<N; ++i){
-            sample(d1, n, X);
-            sample(d2, n, Y);
-            cnt_reject += ( (n * compute_test(X, Y, n)) >= crit_val );
-            
-        }
-        delete[] X;
-        delete[] Y;
+    for(int i=0; i<N; ++i){
+        sample(d1, n, X, gen);
+        sample(d2, n, Y, gen);
+        cnt_reject += ( (n * compute_test(X, Y, n)) >= crit_val );
+        
     }
+    delete[] X;
+    delete[] Y;
+    
 
     return cnt_reject / N;
 }
@@ -115,12 +112,11 @@ double quantile(const std::vector<T>& data, double probability) {
 
 //
 template<typename T>
-void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
-    std::random_device rd;
-    boost::random::mt19937 gen(rd());
+void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y, boost::random::mt19937& gen) {
+    // std::random_device rd;
+    // boost::random::mt19937 gen(rd());
     std::shuffle(Z.begin(), Z.end(), gen);
 
-   
     for(int i=0; i<n; ++i){
         X[i] = Z[i];
         Y[i] = Z[i+n];
@@ -132,11 +128,11 @@ void random_split_direct(std::vector<T> Z, size_t n, double *X, double *Y) {
 //
 template <typename T>
 double compute_crit_val(int n, int M, double alpha, T d1,
-                        std::function<double(double*, double*, int)> compute_test)
+                        std::function<double(double*, double*, int)> compute_test,
+                        boost::random::mt19937& gen)
 {
-    
     double *Z_ = new double[2*n];
-    sample(d1, 2*n, Z_);
+    sample(d1, 2*n, Z_, gen);
     std::vector<double> Z;
     for(int i=0; i<2*n; ++i){
         Z.push_back(Z_[i]);
@@ -144,24 +140,19 @@ double compute_crit_val(int n, int M, double alpha, T d1,
     delete[] Z_;
     
     std::vector<double> test_vals(M);
-    
-    #pragma omp parallel
-    {
 
-        double *X = new double[n];
-        double *Y = new double[n];
+    double *X = new double[n];
+    double *Y = new double[n];
 
-        #pragma omp for
-        for(int i=0; i<M; ++i){
-            random_split_direct(Z, n, X, Y);
-            double test_val = compute_test(X, Y, n);
-            test_vals[i] = n * test_val;
-        }
-
-        delete[] X;
-        delete[] Y;
+    for(int i=0; i<M; ++i){
+        random_split_direct(Z, n, X, Y, gen);
+        double test_val = compute_test(X, Y, n);
+        test_vals[i] = n * test_val;
     }
 
+    delete[] X;
+    delete[] Y;
+    
     return quantile(test_vals, 1 - alpha);
 }
 
@@ -183,7 +174,7 @@ std::pair<std::vector<double>, double> experiment_step(
                     int N, int M, std::vector<int> sample_sizes,
                     std::vector<double> integrals,
                     std::vector<double> crit_vals,
-                    T dist_template,
+                    T dist_template, boost::random::mt19937& gen,
                     std::function<double(double*, double*, int)> compute_test)
 {
 
@@ -208,7 +199,7 @@ std::pair<std::vector<double>, double> experiment_step(
         int n = sample_sizes[i];
         std::cout << "n = " << n << "  ||  ";
         auto d2_n = dist_template(n, h1, h2);
-        double e_pow = compute_empirical_power(n, N, crit_vals[i], d1, d2_n, compute_test);
+        double e_pow = compute_empirical_power(n, N, crit_vals[i], d1, d2_n, compute_test, gen);
         emp_powers.push_back(e_pow);
     }
 
@@ -231,7 +222,7 @@ void run_experiment(double h1, std::vector<double> h2_vals,
                     std::vector<int> sample_sizes,
                     T dist_template, std::vector<double> integrals,
                     std::function<double(double*, double*, int)> compute_test,
-                    bool compute_AP)
+                    bool compute_AP, boost::random::mt19937& gen)
 {   
 
     std::cout << "N = " << N << "\n"; 
@@ -244,7 +235,7 @@ void run_experiment(double h1, std::vector<double> h2_vals,
     std::cout << "computing crit_vals...\n";
     for(int n : sample_sizes){
         Timer t1;
-        double cv = compute_crit_val(n, M, alpha, d1, compute_test);
+        double cv = compute_crit_val(n, M, alpha, d1, compute_test, gen);
         std::cout << "n = " << n << "  ||  cv = " <<  cv << " || ";
         crit_vals.push_back(cv);
     }
@@ -255,7 +246,7 @@ void run_experiment(double h1, std::vector<double> h2_vals,
         Timer t1;
         std::cout << "h2 = " << h2 << "\n";
         auto [e_pow, a_pow] = experiment_step(h1, h2,
-            alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, compute_test);
+            alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, gen, compute_test);
         std::cout << "emp_powers = ";
         print_vector(e_pow);
         if(compute_AP){
@@ -275,7 +266,7 @@ void run_experiment(std::vector<double> h1_vals, double h2,
                     std::vector<int> sample_sizes,
                     T dist_template, std::vector<double> integrals,
                     std::function<double(double*, double*, int)> compute_test,
-                    bool compute_AP)
+                    bool compute_AP, boost::random::mt19937& gen)
 {   
 
     std::cout << "N = " << N << "\n"; 
@@ -288,7 +279,7 @@ void run_experiment(std::vector<double> h1_vals, double h2,
     std::cout << "computing crit_vals...\n";
     for(int n : sample_sizes){
         Timer t1;
-        double cv = compute_crit_val(n, M, alpha, d1, compute_test);
+        double cv = compute_crit_val(n, M, alpha, d1, compute_test, gen);
         std::cout << "n = " << n << "  ||  cv = " <<  cv << " || ";
         crit_vals.push_back(cv);
     }
@@ -299,7 +290,7 @@ void run_experiment(std::vector<double> h1_vals, double h2,
         Timer t1;
         std::cout << "h1 = " << h1 << "\n";
         auto [e_pow, a_pow] = experiment_step(h1, h2,
-            alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, compute_test);
+            alpha, N, M, sample_sizes, integrals, crit_vals, dist_template, gen, compute_test);
         std::cout << "emp_powers = ";
         print_vector(e_pow);
         if (compute_AP){

@@ -8,6 +8,7 @@
 #include <chrono>
 #include "omp.h"
 
+boost::random::mt19937 gen(117);
 
 double g(double x){
     return log(1 + x*x);
@@ -85,8 +86,8 @@ void ex_tmp(std::vector<double> h1_vals, double h2, double alpha, int N, int M,
 {
 
     std::cout<< "ET_" << name << "\n";
-    run_experiment(  h1_vals, h2, alpha, N, M, sample_sizes, get_dist, integrals,
-         [](double* X, double *Y, int n ){return compute_etest(g, X, Y, n);}, false);
+    run_experiment(h1_vals, h2, alpha, N, M, sample_sizes, get_dist, integrals,
+         [](double* X, double *Y, int n ){return compute_etest(g, X, Y, n);}, false, gen);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
@@ -125,7 +126,7 @@ void ex_tmp(double h1, std::vector<double> h2_vals,  double alpha, int N, int M,
 
     std::cout<< "ET_" << name << "\n";
     run_experiment(  h1, h2_vals, alpha, N, M, sample_sizes, get_dist, integrals,
-         [](double* X, double *Y, int n ){return compute_etest(g, X, Y, n);}, false);
+         [](double* X, double *Y, int n ){return compute_etest(g, X, Y, n);}, false, gen);
     std::cout << "================================\n";
     std::cout << "================================\n\n";
 
@@ -198,10 +199,10 @@ void ex3(){
 
 // cauchy with h1=0
 void ex4(){
-    std::vector<double>  h2_vals{1, 3, 5, 7};
+    std::vector<double>  h2_vals{3, 5};
     double h1 = 0.0;
     double alpha = 0.05;
-    std::vector<int> sample_sizes{100, 400, 900};
+    std::vector<int> sample_sizes{100, 200, 300};
     int N = 5000;
     int M = 5000;
     std::vector<double> integrals = read_integrals(DistributionType::CAUCHY);
@@ -210,8 +211,8 @@ void ex4(){
 
 
 int main() {
-    ex1();
-    ex2();
-    ex3();
+    // ex1();
+    // ex2();
+    // ex3();
     ex4();
 }
