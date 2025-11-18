@@ -162,6 +162,37 @@ double compute_crit_val(int n, int M, double alpha, T d1,
 }
 
 
+template <typename T>
+double compute_crit_val_v2(int n, int M, double alpha, T d1,
+                        std::function<double(double*, double*, int)> compute_test,
+                        boost::random::mt19937& gen)
+{
+    std::vector<double> test_vals(M);
+
+    double *X = new double[n * M];
+    double *Y = new double[n * M];
+    
+    for(int i=0; i<M; ++i){
+        sample(d1, n, X + (i * n), gen);
+        sample(d1, n, Y + (i * n), gen);
+    }
+
+    #pragma omp parallel for
+    for(int i=0; i<M; ++i){
+        double test_val = compute_test(X + (i * n), Y + (i * n), n);
+        #pragma omp critical
+        {
+            test_vals[i] = n * test_val;
+        }
+    }
+
+    delete[] X;
+    delete[] Y;
+    
+    return quantile(test_vals, 1 - alpha);
+}
+
+
 enum class DistributionType {
     NORMAL = 0,
     CAUCHY = 1
