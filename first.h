@@ -72,7 +72,7 @@ double compute_empirical_power(int n, int N, double crit_val, T d1, T d2,
 
     #pragma omp parallel for reduction(+:cnt_reject)
     for(int i=0; i<N; ++i){
-        cnt_reject += ( (n * compute_test(X + (i * n), Y + (i * n), n)) >= crit_val );
+        cnt_reject += ( compute_test(X + (i * n), Y + (i * n), n) >= crit_val );
     }
 
     delete[] X;
@@ -151,7 +151,7 @@ double compute_crit_val(int n, int M, double alpha, T d1,
         double test_val = compute_test(X + (i * n), Y + (i * n), n);
         #pragma omp critical
         {
-            test_vals[i] = n * test_val;
+            test_vals[i] = test_val;
         }
     }
 
@@ -182,7 +182,7 @@ double compute_crit_val_v2(int n, int M, double alpha, T d1,
         double test_val = compute_test(X + (i * n), Y + (i * n), n);
         #pragma omp critical
         {
-            test_vals[i] = n * test_val;
+            test_vals[i] = test_val;
         }
     }
 

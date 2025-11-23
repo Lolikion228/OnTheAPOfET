@@ -122,7 +122,7 @@ double compute_etest(double (*g)(double), double *X, double *Y, int sample_size)
 
     }
 
-    return (phi_ab - phi_a - phi_b) / (sample_size * sample_size);
+    return sample_size * (phi_ab - phi_a - phi_b) / (sample_size * sample_size);
 }
 
 double compute_ks(double *X, double *Y, int sample_size){
