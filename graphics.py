@@ -5,6 +5,8 @@ import re
 import numpy as np
 from typing import List, Dict
 
+colors = {'AD':'red', 'KS':'green', 'WMW':'blue', 'CM':'orange', 'ET':'purple', 'HT':'pink'}
+
 def plot_comparison_graphs(csv_dir: str = "./notes/res4/csvs", output_dir: str = "./plots"):
     """
     Строит графики сравнения тестов для фиксированных dist_name и типа fixed_value
@@ -97,11 +99,11 @@ def plot_by_rows(dfs: Dict, dist_name: str, fixed_type: str, varying_param: str,
                     # Сортируем по x_values
                     sorted_data = sorted(zip(x_values, y_values))
                     x_sorted, y_sorted = zip(*sorted_data)
-                    
+                    clr = colors[test_name]
                     plt.plot(x_sorted, y_sorted, 
                             marker='o', 
                             linewidth=2,
-                            label=f'{test_name}')
+                            label=f'{test_name}', c=clr, mfc=clr, mec=clr)
         
         plt.xlabel(f'{varying_param} values', fontsize=12)
         plt.ylabel('Empirical Power', fontsize=12)
@@ -154,11 +156,11 @@ def plot_by_columns(dfs: Dict, dist_name: str, fixed_type: str, varying_param: s
                     # Сортируем по n_values
                     sorted_data = sorted(zip(n_values, powers))
                     n_sorted, powers_sorted = zip(*sorted_data)
-                    
+                    clr = colors[test_name]
                     plt.plot(n_sorted, powers_sorted, 
                             marker='s', 
                             linewidth=2,
-                            label=f'{test_name}')
+                            label=f'{test_name}', c=clr, mfc=clr, mec=clr)
         
         plt.xlabel('Sample Size (n)', fontsize=12)
         plt.ylabel('Empirical Power', fontsize=12)
@@ -177,7 +179,7 @@ def plot_by_columns(dfs: Dict, dist_name: str, fixed_type: str, varying_param: s
 
 if __name__ == "__main__":
 
-    plot_comparison_graphs(csv_dir = './notes/res4/csvs/', output_dir='./graphics/')
+    plot_comparison_graphs(csv_dir = './notes/res17/csvs/', output_dir='./graphics_v4/')
     
 
     

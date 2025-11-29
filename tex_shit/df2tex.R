@@ -22,8 +22,8 @@ get_table_caption <- function(filename) {
     return(paste(test_full, "Test for", dist_full, "Distribution ( fixed", fixed_param, ")"))
 }
 
-for( fname in list.files(path = "./notes/res4/csvs", full.names = F)){
-  df <- read.csv(paste("./notes/res4/csvs/", fname, sep=""))
+for( fname in list.files(path = "./notes/res16/csvs", full.names = F)){
+  df <- read.csv(paste("./notes/res16/csvs/", fname, sep=""))
   if(grepl("h1", fname)) {
         new_names <- gsub("h2\\.", "h2=", names(df))
     } else {
@@ -37,5 +37,5 @@ for( fname in list.files(path = "./notes/res4/csvs", full.names = F)){
   table <- gsub("\\\\begin\\{tabular\\}", "\\\\hspace*{-1.0cm}\\\\begin\\{tabular\\}\n", table)
   table <- gsub("\\\\addlinespace", "", table)
   table <- gsub("\\\\\\n\\AP", "\\\\\n\\\\addlinespace\nAP", table)
-  writeLines(table, paste("./tex_shit/tables/", substr(fname ,1, nchar(fname)-4), ".tex" ,sep=""))
+  writeLines(table, paste("./notes/res16/tables/table_et/", substr(fname ,1, nchar(fname)-4), ".tex" ,sep=""))
 }

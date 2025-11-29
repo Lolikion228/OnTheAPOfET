@@ -4,12 +4,14 @@ import os
 def parse_file(filename):
     with open(filename, 'r', encoding='utf-8') as f:
         content = f.read()
+        
     
     # Регулярное выражение для поиска блоков
-    pattern = r'([A-Z]+_[A-Z]+):\s*\n(.*?)(?=\n[A-Z]+_[A-Z]+:|$)'
+    pattern = r'([A-Z]+_[A-Z]+)\s*\n(.*?)(?=\n[A-Z]+_[A-Z]+|$)'
     blocks = re.findall(pattern, content, re.DOTALL)
     
     for block_header, block_content in blocks:
+    
         # Определяем test_name и dist_name
         test_dist_match = re.match(r'([A-Z]+)_([A-Z]+)', block_header)
         if not test_dist_match:
@@ -28,7 +30,7 @@ def parse_file(filename):
         h_type, h_value = h_matches[0]
         
         # Создаем имя файла
-        output_filename = f"./notes/res4/splitted/{test_name}_{dist_name}_{h_type}={h_value}.txt"
+        output_filename = f"./notes/res19/splitted/{test_name}_{dist_name}_{h_type}={h_value}.txt"
         
         # Записываем содержимое блока в файл
         with open(output_filename, 'w', encoding='utf-8') as f:
@@ -37,7 +39,7 @@ def parse_file(filename):
 
 
 def main():
-    input_file = "./notes/res4/all.txt"
+    input_file = "./notes/res19/all.txt"
     
     if not os.path.exists(input_file):
         print(f"Файл {input_file} не найден!")
